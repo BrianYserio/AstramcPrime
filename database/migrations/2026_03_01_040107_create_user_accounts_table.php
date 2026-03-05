@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('user_id')->unique();   // Custom system ID
             $table->string('username')->unique();
             $table->string('password');            // Should always be hashed
-            $table->string('api_token')->nullable();
+            $table->string('api_token');
 
             $table->string('role')->nullable();
             $table->string('prepared_by')->nullable();

@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('hr_employee_assigned_location', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('isActive')->default(true);
+            $table->enum('isActive', ['Yes', 'No'])->default('Yes');
             $table->timestamps();
-            $table->softDeletes('deleted_at', precision: 0);
             $table->softDeletes();
         });
     }

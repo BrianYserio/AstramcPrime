@@ -2,6 +2,7 @@
 
 namespace App\Models\Users;
 
+use App\Models\human_resource\Employee;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
 
@@ -9,15 +10,7 @@ class UserAccount extends Authenticatable
 {
     protected $table = 'user_accounts';
 
-    protected $fillable = [
-        'user_id',
-        'username',
-        'password',
-        'api_token',
-        'role',
-        'prepared_by',
-        'is_active',
-    ];
+    protected $guarded= [];
 
     protected $casts = [
         'is_active' => 'boolean',
@@ -28,6 +21,10 @@ class UserAccount extends Authenticatable
         'api_token',
     ];
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 
     protected static function boot()
     {

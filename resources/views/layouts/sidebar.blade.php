@@ -35,6 +35,23 @@
                     <li><a href="{{ route('employees.index') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-gray-200 rounded">Employees</a></li>
                 </ul>
             </li>
+
+            <li>
+                <button type="button"
+                    class="w-full text-left text-slate-800 font-medium hover:bg-gray-200 text-[15px] flex items-center rounded px-4 py-2"
+                    onclick="toggleSubmenu('useraccountSubmenu')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-[18px] h-[18px] mr-3" viewBox="0 0 512 512">
+                        <path d="M437.02 74.98C388.668 26.63 324.379 0 256 0S123.332 26.629 74.98 74.98C26.63 123.332 0 187.621 0 256s26.629 132.668 74.98 181.02C123.332 485.37 187.621 512 256 512s132.668-26.629 181.02-74.98C485.37 388.668 512 324.379 512 256s-26.629-132.668-74.98-181.02zM111.105 429.297c8.454-72.735 70.989-128.89 144.895-128.89 38.96 0 75.598 15.179 103.156 42.734 23.281 23.285 37.965 53.687 41.742 86.152C361.641 462.172 311.094 482 256 482s-105.637-19.824-144.895-52.703z"/>
+                    </svg>
+                    <span>Administrator</span>
+                </button>
+
+                <ul id="useraccountSubmenu" class="ml-8 mt-2 space-y-1 hidden">
+                    <li><a href="{{ route('user-accounts.index') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-gray-200 rounded">User-Accounts</a></li>
+                </ul>
+
+
+            </li>
         </ul>
     </div>
 </nav>

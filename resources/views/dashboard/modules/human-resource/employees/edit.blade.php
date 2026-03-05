@@ -57,8 +57,9 @@
         }
     </script>
 
-    <form action="{{ route('employees.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('employees.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
+    @method('PUT')
         <div class="space-y-4">
 
             {{-- ══════════════════════════════════════════════════════════════ --}}
@@ -73,20 +74,20 @@
                     </x-prev-link>
 
                     <div class="flex items-center gap-2.5">
-                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 text-blue-500">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-50 text-orange-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </span>
                         <div>
-                            <h1 class="text-sm font-semibold text-gray-800 leading-tight">New Employee</h1>
+                            <h1 class="text-sm font-semibold text-gray-800 leading-tight">Edit Employee Information</h1>
                             <p class="text-[0.7rem] text-gray-400">Fill in the details below to create an account</p>
                         </div>
                     </div>
 
-                    <x-badge.status color="yellow" label="Pending" class="ml-auto" />
+                    <x-badge.status color="yellow" label="{{ $employees->emp_status }}" class="ml-auto" />
                 </div>
 
                 <div class="flex items-center gap-3 px-6 pt-5 pb-2">
@@ -121,18 +122,21 @@
                                 <x-input-field
                                     label="middlename"
                                     name="middleName"
+                                    value="{{ $employees->middle_name }}"
                                     :styles="$styles"
                                 />
 
                                 <x-input-field
                                     label="Last Name"
                                     name="lastName"
+                                    value="{{ $employees->last_name }}"
                                     :styles="$styles"
                                 />
 
                                 <x-input-field
                                     label="Birthdate"
                                     name="birthdate"
+                                    value="{{ $employees->birthdate }}"
                                     type="date"
                                     :styles="$styles"
                                 />
@@ -158,7 +162,7 @@
                                     <x-forms.select-field name="civil_status" class="{{ $styles['compact'] }}">
                                         <option value="">Select Status</option>
                                         @foreach($credentials['civil_status'] as $cstatus)
-                                            <option value="{{ $cstatus }}" @selected(old('civil_status') == $cstatus)>{{ $cstatus }}</option>
+                                            <option value="{{ $cstatus }}" @selected(old('civil_status', $employees->civil_status) == $cstatus)>{{ $cstatus }}</option>
                                         @endforeach
                                     </x-forms.select-field>
                                 </div>
@@ -168,7 +172,7 @@
                                     <x-forms.select-field name="citizenship" class="{{ $styles['compact'] }}">
                                         <option value="">Select Status</option>
                                         @foreach($credentials['citizenships'] as $citizenship)
-                                            <option value="{{ $citizenship }}" @selected(old('citizenship') == $citizenship)>{{ $citizenship }}</option>
+                                            <option value="{{ $citizenship }}" @selected(old('citizenship', $employees->citizenship) == $citizenship)>{{ $citizenship }}</option>
                                         @endforeach
                                     </x-forms.select-field>
                                 </div>
@@ -176,18 +180,20 @@
                                 <x-input-field
                                     label="Contact no"
                                     name="contactNumber"
+                                    value="{{ $employees->contact_number }}"
                                     :styles="$styles"
                                 />
 
                                 <x-input-field
                                     label="email"
                                     name="email"
+                                    value="{{ $employees->email }}"
                                     :styles="$styles"
                                 />
 
                                 <div class="sm:col-span-2">
                                     <label for="address" class="{{ $styles['label'] }}">Complete Address</label>
-                                    <input id="address" type="text" name="address"
+                                    <input id="address" type="text" name="address" value="{{ $employees->address }}"
                                            class="{{ $styles['input'] }} {{ $styles['compact'] }}" />
                                 </div>
 
@@ -224,7 +230,7 @@
                     </div>
                 </div>
             </div>
-            
+
             {{-- /card: personal background --}}
 
 
@@ -246,7 +252,7 @@
                             label="Date Hired"
                             name="date_hired"
                             type="date"
-                            required
+                            value="{{ $employees->date_hired }}"
                             :styles="$styles"
                         />
 
@@ -254,6 +260,7 @@
                             label="Date Status"
                             name="date_status"
                             type="date"
+                            value="{{ $employees->date_status }}"
                             :styles="$styles"
                         />
 
@@ -263,7 +270,7 @@
                             <x-forms.select-field name="assigned_location" class="{{ $styles['compact'] }}">
                                 <option value="">Select location</option>
                                 @foreach($credentials['locations'] as $location)
-                                    <option value="{{ $location }}" @selected(old('assigned_location') == $location)>
+                                    <option value="{{ $location }}" @selected(old('assigned_location', $employees->assigned_location) == $location)>
                                         {{ $location }}
                                     </option>
                                 @endforeach
@@ -273,7 +280,7 @@
                 </div>
 
                 {{-- Section: Role & Classification --}}
-                
+
                 <div>
                     {{-- <x-cards.section-label label="Role & Classification" /> --}}
 
@@ -287,7 +294,7 @@
                             <x-forms.select-field name="company" class="{{ $styles['compact'] }}">
                                 <option value="">Select company</option>
                                 @foreach($credentials['companies'] as $company)
-                                    <option value="{{ $company }}" @selected(old('company') == $company)>
+                                    <option value="{{ $company }}" @selected(old('company', $employees->company) == $company)>
                                         {{ $company }}
                                     </option>
                                 @endforeach
@@ -299,17 +306,23 @@
                             <x-forms.select-field name="designation" class="{{ $styles['compact'] }}">
                                 <option value="">Select designation</option>
                                 @foreach($credentials['designations'] as $designation)
-                                    <option value="{{ $designation }}" @selected(old('designation') == $designation)>
+                                    <option value="{{ $designation }}" @selected(old('designation', $employees->branch) == $designation)>
                                         {{ $designation }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>
                         </div>
 
+                        {{-- Row 2: Level | Position | Employee Status --}}
                         <div class="flex flex-col gap-1">
-                            <label class="{{ $styles['label'] }}">Sub-designation</label>
+                            <label class="{{ $styles['label'] }}">Sub Designation</label>
                             <x-forms.select-field name="sub_designation" class="{{ $styles['compact'] }}">
-                                <option value="">N/A</option>
+                                <option value="">Select Sub Designations</option>
+                                @foreach($credentials['sub_designations'] as $sub_designation)
+                                    <option value="{{ $sub_designation }}" @selected(old('sub_designation', $employees->sub_branch) == $sub_designation)>
+                                        {{ $sub_designation }}
+                                    </option>
+                                @endforeach
                             </x-forms.select-field>
                         </div>
 
@@ -319,7 +332,7 @@
                             <x-forms.select-field name="level" class="{{ $styles['compact'] }}">
                                 <option value="">Select level</option>
                                 @foreach($credentials['levels'] as $level)
-                                    <option value="{{ $level }}" @selected(old('level') == $level)>
+                                    <option value="{{ $level }}" @selected(old('level', $employees->level) == $level)>
                                         {{ $level }}
                                     </option>
                                 @endforeach
@@ -331,7 +344,7 @@
                             <x-forms.select-field name="position" class="{{ $styles['compact'] }}">
                                 <option value="">Select position</option>
                                 @foreach($credentials['positions'] as $position)
-                                    <option value="{{ $position }}" @selected(old('position') == $position)>
+                                    <option value="{{ $position }}" @selected(old('position', $employees->position) == $position)>
                                         {{ $position }}
                                     </option>
                                 @endforeach
@@ -345,7 +358,7 @@
                             <x-forms.select-field name="emp_status" class="{{ $styles['compact'] }}">
                                 <option value="">Select status</option>
                                 @foreach($credentials['emp_status'] as $emp_stats)
-                                    <option value="{{ $emp_stats }}" @selected(old('emp_status') == $emp_stats)>
+                                    <option value="{{ $emp_stats }}" @selected(old('emp_status', $employees->emp_status) == $emp_stats)>
                                         {{ $emp_stats }}
                                     </option>
                                 @endforeach
@@ -358,7 +371,7 @@
             </div>
 
         </div>
-            
+
             {{-- /card: employment information --}}
 
 
@@ -375,24 +388,28 @@
                         <x-input-field
                             label="Pagibig"
                             name="pagibig_number"
+                            value="{{ $employees->pagibig }}"
                             :styles="$styles"
                         />
 
                         <x-input-field
                             label="Philhealth"
                             name="philhealth_number"
+                            value="{{ $employees->philhealth }}"
                             :styles="$styles"
                         />
 
                         <x-input-field
                             label="SSS"
                             name="sss_number"
+                            value="{{ $employees->sss }}"
                             :styles="$styles"
                         />
 
                         <x-input-field
                             label="tin"
                             name="tin_number"
+                            value="{{ $employees->tin }}"
                             :styles="$styles"
                         />
 
@@ -400,7 +417,7 @@
                 </div>
 
             </div>
-            
+
             {{-- /card: government identification --}}
 
 

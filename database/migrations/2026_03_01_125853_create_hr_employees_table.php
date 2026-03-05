@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Branch;
+use App\Models\Company;
+use App\Models\human_resource\EmployeePosition;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -32,12 +35,12 @@ return new class extends Migration
             // 🏢 Employment Details
             $table->date('date_hired')->nullable();
             $table->date('date_status')->nullable();
-            $table->string('position')->index()->nullable();
+            $table->foreignIdFor(EmployeePosition::class);
             $table->string('emp_status')->nullable();
             // If you have astra_companies table:
-            $table->string('company')->nullable();
+            $table->foreignIdFor(Company::class);
             $table->string('level')->nullable();
-            $table->string('branch')->nullable();
+            $table->foreignIdFor(Branch::class);
             $table->string('sub_branch')->nullable();
             $table->string('assigned_location')->nullable();
 

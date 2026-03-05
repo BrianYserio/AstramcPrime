@@ -73,11 +73,11 @@
                     </x-prev-link>
 
                     <div class="flex items-center gap-2.5">
-                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 text-blue-500">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-50 text-orange-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </span>
                         <div>
@@ -223,7 +223,7 @@
                     </div>
                 </div>
             </div>
-            
+
             {{-- /card: personal background --}}
 
 
@@ -272,7 +272,7 @@
                 </div>
 
                 {{-- Section: Role & Classification --}}
-                
+
                 <div>
                     {{-- <x-cards.section-label label="Role & Classification" /> --}}
 
@@ -305,10 +305,16 @@
                             </x-forms.select-field>
                         </div>
 
+                        {{-- Row 2: Level | Position | Employee Status --}}
                         <div class="flex flex-col gap-1">
-                            <label class="{{ $styles['label'] }}">Sub-designation</label>
-                            <x-forms.select-field name="sub_designation" class="{{ $styles['compact'] }}">
-                                <option value="">N/A</option>
+                            <label class="{{ $styles['label'] }}">Sub Designation</label>
+                            <x-forms.select-field name="sub_branch" class="{{ $styles['compact'] }}">
+                                <option value="">Select Sub Designations</option>
+                                @foreach($credentials['sub_designations'] as $sub_designation)
+                                    <option value="{{ $sub_designation }}" @selected(old('sub_designation') == $sub_designation)>
+                                        {{ $sub_designation }}
+                                    </option>
+                                @endforeach
                             </x-forms.select-field>
                         </div>
 
@@ -354,12 +360,10 @@
                     </div>
                 </div>
 
-                
-
             </div>
 
         </div>
-            
+
             {{-- /card: employment information --}}
 
 
@@ -401,7 +405,7 @@
                 </div>
 
             </div>
-            
+
             {{-- /card: government identification --}}
 
 

@@ -14,7 +14,7 @@
      */
     $ui = [
         'label'    => 'block text-[0.68rem] font-bold uppercase tracking-widest text-gray-400 mb-1',
-        'field'    => 'w-full px-3 py-2 text-xs rounded-lg border border-gray-200 bg-gray-50
+        'field'    => 'w-full px-3 py-2 text-xs rounded-lg border border-orange-200 bg-gray-100
                        text-gray-700 font-mono cursor-not-allowed select-none focus:outline-none',
         'badge'    => 'inline-flex items-center text-[0.6rem] font-semibold px-1.5 py-0.5 rounded',
         'section'  => 'text-[0.68rem] font-bold uppercase tracking-widest text-gray-400',
@@ -92,13 +92,13 @@
             </x-prev-link>
 
             <div class="flex items-center gap-2.5">
-                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50 text-blue-500"
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-50 text-orange-500"
                       aria-hidden="true">
                     {{-- Person icon --}}
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </span>
                 <div>
@@ -107,7 +107,7 @@
                 </div>
             </div>
 
-            <x-badge.status color="yellow" label="Pending" class="ml-auto" />
+            <x-badge.status color="yellow" label="{{ $employees->emp_status }}" class="ml-auto" />
         </div>
 
         {{-- Section label --}}
@@ -195,13 +195,13 @@
 
                 {{-- Profile photo — display only --}}
                 <div class="w-full lg:w-48 flex-shrink-0">
-                    <div class="border border-gray-200 rounded-lg p-3 flex flex-col items-center bg-gray-50">
+                    <div class="border border-orange-200 rounded-lg p-3 flex flex-col items-center bg-gray-50">
                         <img src="{{ $employees->profile_image
                                         ? asset('storage/' . $employees->profile_image)
                                         : asset('assets/img/avatar5.png') }}"
                              class="w-32 h-32 object-cover rounded mb-2"
                              alt="{{ $employees->first_name }} profile photo" />
-                        <span class="{{ $ui['badge'] }} text-gray-400 bg-gray-100 text-[0.6rem] mt-1">
+                        <span class="{{ $ui['field'] }} text-gray-400 bg-gray-100 text-[0.6rem] mt-1">
                             Read-only
                         </span>
                     </div>
@@ -230,7 +230,7 @@
                     'Designation'        => $employees->branch,
                     'Level'              => $employees->level,
                     'Position'           => $employees->position,
-                    'Sub-Designation'    => $employees->sub_designation ?? 'N/A',
+                    'Sub-Designation'    => $employees->sub_branch,
                     'Status'             => $employees->emp_status,
                     'Date Status'        => $employees->date_status,
                     'Assigned Location'  => $employees->assigned_location,
@@ -340,7 +340,7 @@
         <div class="px-6 pt-5 pb-6">
             <div class="overflow-x-auto">
                 <table class="min-w-full border border-gray-200 rounded-lg">
-                    
+
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="p-4 text-left text-sm font-semibold text-slate-900">Monday</th>

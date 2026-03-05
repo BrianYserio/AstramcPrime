@@ -18,10 +18,12 @@ class EmployeeCredentials
             'citizenships' => config('hr_credentials.citizenships'),
             'levels'       => config('hr_credentials.levels'),
             'emp_status'   => config('hr_credentials.employment_status'),
+            'sub_designations' => config('hr_credentials.sub_designations'),
             'companies'    => $this->getCompanyList(),
             'positions'    => $this->getPosition(),
             'locations'    => $this->getLocation(),
-            'designations' => $this->getDesignation()
+            'designations' => $this->getDesignation(),
+
         ];
     }
 

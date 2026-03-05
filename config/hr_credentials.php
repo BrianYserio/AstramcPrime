@@ -60,5 +60,11 @@ return [
         'Executives',
     ],
 
+    'sub_designations' => [
+        'N/A',
+        'SALES - ASTRAMC QUIRINO TEAM 1',
+        'SALES - ASTRAMC QUIRINO TEAM 2',
+    ]
+
 ];
 

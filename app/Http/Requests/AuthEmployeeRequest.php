@@ -41,6 +41,7 @@ class AuthEmployeeRequest extends FormRequest
             'date_status'       => ['required', 'date'],
             'company'           => ['required', 'string', 'max:255'],
             'level'             => ['required', 'string'],
+            'emp_status'             => ['required', 'string'],
             'designation'       => ['required', 'string', 'max:255'],
             'sub_designation'   => ['nullable', 'string', 'max:255'],
             'position'          => ['required', 'string', 'max:100'],
@@ -52,7 +53,7 @@ class AuthEmployeeRequest extends FormRequest
             'sss_number'        => ['nullable', 'string'],
             'tin_number'        => ['nullable', 'string'],
 
-            
+
         ];
     }
 }

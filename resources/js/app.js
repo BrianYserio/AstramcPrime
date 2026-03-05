@@ -16,7 +16,7 @@ const sidebar = document.getElementById('sidebar');
 
 
    //  FIX 1: previewImage() defined here
-   
+
         function previewImage(event) {
             const file = event.target.files[0];
             if (!file) return;

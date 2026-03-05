@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hr_employee_position', function (Blueprint $table) {
+        Schema::create('user_roles', function (Blueprint $table) {
             $table->id('row_id');
-            $table->string('position_description');
-            $table->enum('isActive', ['Yes', 'No'])->default('Yes');
-            $table->softDeletes();
+            $table->string('role_id')->unique();
+            $table->string('role_description');
+            $table->string('permissions')->unique()->nullable();
+            $table->softDeletes('deleted_at', precision: 0);
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hr_employee_position');
+        Schema::dropIfExists('user_roles');
     }
 };

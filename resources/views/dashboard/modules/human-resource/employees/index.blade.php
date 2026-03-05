@@ -91,8 +91,8 @@
                         </td>
 
                         <td class="px-4 py-3 text-xs">
-                            {{-- @php
-                                $s = strtolower($transmittal->status);
+                            @php
+                                $s = strtolower($employee->emp_status);
                                 $badge = match($s) {
                                     'approved','received' => 'bg-green-100 text-green-700 border border-green-200',
                                     'pending'            => 'bg-yellow-100 text-yellow-700 border border-yellow-200',
@@ -101,8 +101,8 @@
                                 };
                             @endphp
                             <span class="inline-flex items-center gap-1.5 {{ $badge }} text-[0.65rem] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full whitespace-nowrap">
-                                {{ $transmittal->status }}
-                            </span> --}}
+                                {{ $employee->emp_status }}
+                            </span>
                         </td>
                     </tr>
                     @endforeach

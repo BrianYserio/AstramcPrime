@@ -57,7 +57,7 @@
         }
     </script>
 
-    <form action="{{ route('employees.update') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('employees.update', $employees->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
     @method('PUT')
         <div class="space-y-4">
@@ -267,11 +267,14 @@
                         {{-- Assignment --}}
                         <div class="flex flex-col gap-1">
                             <label class="{{ $styles['label'] }}">Assigned Location</label>
+
                             <x-forms.select-field name="assigned_location" class="{{ $styles['compact'] }}">
-                                <option value="">Select location</option>
+                                <option value="">Select Assigned Location</option>
+
                                 @foreach($credentials['locations'] as $location)
-                                    <option value="{{ $location }}" @selected(old('assigned_location', $employees->assigned_location) == $location)>
-                                        {{ $location }}
+                                    <option value="{{ $location->id }}"
+                                        @selected(old('assigned_location', $employees->assigned_location) == $location->id)>
+                                        {{ $location->name }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>
@@ -294,8 +297,8 @@
                             <x-forms.select-field name="company" class="{{ $styles['compact'] }}">
                                 <option value="">Select company</option>
                                 @foreach($credentials['companies'] as $company)
-                                    <option value="{{ $company }}" @selected(old('company', $employees->company) == $company)>
-                                        {{ $company }}
+                                    <option value="{{ $company->id }}" @selected(old('company', $employees->company_name) == $company->id)>
+                                        {{ $company->company_name }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>
@@ -306,8 +309,8 @@
                             <x-forms.select-field name="designation" class="{{ $styles['compact'] }}">
                                 <option value="">Select designation</option>
                                 @foreach($credentials['designations'] as $designation)
-                                    <option value="{{ $designation }}" @selected(old('designation', $employees->branch) == $designation)>
-                                        {{ $designation }}
+                                    <option value="{{ $designation->id }}" @selected(old('designation', $employees->branch_name) == $designation->id)>
+                                        {{ $designation->branch_name }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>
@@ -344,8 +347,8 @@
                             <x-forms.select-field name="position" class="{{ $styles['compact'] }}">
                                 <option value="">Select position</option>
                                 @foreach($credentials['positions'] as $position)
-                                    <option value="{{ $position }}" @selected(old('position', $employees->position) == $position)>
-                                        {{ $position }}
+                                    <option value="{{ $position->id }}" @selected(old('position', $employees->position_description) == $position->id)>
+                                        {{ $position->position_description }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>

@@ -2,6 +2,10 @@
 
 namespace App\Http\Services;
 
+use App\Models\Branch;
+use App\Models\Company;
+use App\Models\human_resource\AssignedLocation;
+use App\Models\human_resource\EmployeePosition;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeCredentials
@@ -29,26 +33,29 @@ class EmployeeCredentials
 
     private function getCompanyList()
     {
-        return DB::table('astra_company')->where('isActive', 'Yes')->pluck('company_name');
+        return Company::select('row_id', 'company_name')
+        ->orderBy('company_name')
+        ->get();
     }
 
     private function getPosition()
     {
-        return DB::table('hr_employee_position')->where('isActive', 'Yes')->pluck('position_description');
+        return EmployeePosition::select('row_id', 'position_description')
+        ->orderBy('position_description')
+        ->get();
     }
 
     private function getLocation()
     {
-        return DB::table('hr_employee_assigned_location')
-            ->where('isActive', true)
-            ->pluck('name');
+        return AssignedLocation::select('id', 'name')
+        ->orderBy('name')
+        ->get();
     }
 
     private function getDesignation()
     {
-        // Changed to whereIn to correctly handle the array of types
-        return DB::table('astra_branches')
-            ->whereIn('bytype', ['Department', 'Branch', 'Sub-department'])
-            ->pluck('branch_name');
+        return Branch::select('row_id', 'branch_name')
+            ->orderBy('branch_name')
+            ->get();
     }
 }

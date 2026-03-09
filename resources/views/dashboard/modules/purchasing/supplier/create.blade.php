@@ -328,65 +328,6 @@
             </div>
             {{-- /card: personal background --}}
 
-            {{-- ══════════════════════════════════════════════════════════════ --}}
-            {{-- Card: Employment Information                                   --}}
-            {{-- ══════════════════════════════════════════════════════════════ --}}
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                <x-cards.accent-header icon="lock" title="Login Credentials" badge="EMP-RECORD" />
-            <div class="px-6 pt-5 pb-6 space-y-6">
-                {{-- Section: Tenure --}}
-                <div>
-                    {{-- <x-cards.section-label label="Tenure" /> --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-3">
-                        <div class="flex flex-col gap-1">
-                            <label class="{{ $styles['label'] }}">
-                                username
-                            </label>
-                            <input id="employeeName" type="text" name="name"
-                                class="{{ $styles['input'] }} {{ $styles['compact'] }}" />
-                            @error('name')
-                                <p class="text-xs text-red-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label class="{{ $styles['label'] }}">
-                                password
-                            </label>
-                            <input id="employeePass" type="password" name="password"
-                                class="{{ $styles['input'] }} {{ $styles['compact'] }}" />
-                            @error('password')
-                                <p class="text-xs text-red-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="flex flex-col gap-1">
-                            <label class="{{ $styles['label'] }}">
-                                confirm password
-                            </label>
-                            <input type="password" name="confirm_password"
-                                class="{{ $styles['input'] }} {{ $styles['compact'] }}" />
-                            @error('confirm_password')
-                                <p class="text-xs text-red-500">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-            {{-- /card: employment information --}}
-
-
-            {{-- ── Footer Actions ──────────────────────────────────────────── --}}
-            <div class="flex items-center justify-end gap-2 pt-1 pb-4">
-                <button type="submit"
-                        class="inline-flex items-center gap-2 px-7 py-2.5 text-sm font-semibold text-white
-                               bg-blue-600 rounded-lg shadow-sm shadow-blue-200 transition
-                               hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98]">
-                    Save User Account
-                </button>
-            </div>
         </div>{{-- /space-y-4 --}}
     </form>
 

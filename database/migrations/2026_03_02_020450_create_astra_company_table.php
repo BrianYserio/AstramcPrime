@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use phpDocumentor\Reflection\PseudoTypes\True_;
 
 return new class extends Migration
 {
@@ -27,8 +28,8 @@ return new class extends Migration
             $table->string('tin')->nullable();
             $table->string('contact_person')->nullable();
 
-            $table->enum('isActive', ['Yes', 'No'])->default('Yes');
-            $table->softDeletes('deleted_at', precision: 0);
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

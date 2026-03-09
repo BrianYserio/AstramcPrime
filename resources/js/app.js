@@ -1,4 +1,6 @@
 import './bootstrap';
+// index.js
+import 'preline'
 
 // sidebar toggle button
 

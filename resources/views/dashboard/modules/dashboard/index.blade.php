@@ -1,3 +1,5 @@
 <x-app-layout title="Astra Trucks & Equipments">
-    <h1>Hello World</h1>
+    <!-- Select -->
+
+<!-- End Select -->
 </x-app-layout>

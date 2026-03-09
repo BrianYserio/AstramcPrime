@@ -68,46 +68,42 @@
                         <td class="px-4 py-3 text-xs text-gray-400 font-mono">$i + 1</td>
 
                         <td class="px-4 py-3 text-xs">
-                            <a href=""
+                            <a href="{{route('user-accounts.show', $employee->id)}}"
                                class="text-blue-600 hover:text-blue-800 font-semibold font-mono hover:underline">
                                 {{ $employee->employee_id }}
                             </a>
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->first_name }} {{ $employee->last_name }} {{ $employee->middle_name }}
+                            {{ $employee->first_name }} {{ $employee->last_name }}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-700 font-medium">
-
+                            {{ $employee->first_name }} {{ $employee->last_name }}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->position }}
+                            {{ $employee->position->position_description }}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->date_hired }}
+                            {{ $employee->UserRole?->role }}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->date_hired }}
+                            {{ $employee->created_at }}
                         </td>
 
-                        <td class="px-4 py-3 text-xs">
-                            {{-- @php
-                                $s = strtolower($employee->emp_status);
-                                $badge = match($s) {
-                                    'approved','received' => 'bg-green-100 text-green-700 border border-green-200',
-                                    'pending'            => 'bg-yellow-100 text-yellow-700 border border-yellow-200',
-                                    'cancelled'          => 'bg-red-100 text-red-600 border border-red-200',
-                                    default              => 'bg-gray-100 text-gray-600 border border-gray-200',
-                                };
-                            @endphp
-                            <span class="inline-flex items-center gap-1.5 {{ $badge }} text-[0.65rem] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full whitespace-nowrap">
-                                {{ $employee->emp_status }}
-                            </span> --}}
-                        </td>
+                           @if($employee->is_active == "1")
+                                <td class="px-4 py-3 text-xs">
+                                    <span class="text-green-600">Yes</span>
+                                </td>
+                            @else
+                                <td class="px-4 py-3 text-xs">
+                                    <span class="text-red-600">No</span>
+                                </td>
+                            @endif
+                           
                     </tr>
                     @endforeach
                 </tbody>

@@ -226,14 +226,14 @@
                 {{-- Scalar employment fields --}}
                 @foreach([
                     'Date Hired'         => $employees->date_hired,
-                    'Company'            => $employees->company,
-                    'Designation'        => $employees->branch,
+                    'Company'            => $employees->company->company_name,
+                    'Designation'        => $employees->branch->branch_name,
                     'Level'              => $employees->level,
-                    'Position'           => $employees->position,
+                    'Position'           => $employees->position->position_description,
                     'Sub-Designation'    => $employees->sub_branch,
                     'Status'             => $employees->emp_status,
                     'Date Status'        => $employees->date_status,
-                    'Assigned Location'  => $employees->assigned_location,
+                    'Assigned Location'  => $employees->location->name,
                 ] as $empLabel => $empValue)
                     <div>
                         <label class="{{ $ui['label'] }}">{{ $empLabel }}</label>

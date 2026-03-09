@@ -260,10 +260,11 @@
                         <div class="flex flex-col gap-1">
                             <label class="{{ $styles['label'] }}">Assigned Location</label>
                             <x-forms.select-field name="assigned_location" class="{{ $styles['compact'] }}">
-                                <option value="">Select location</option>
+                                <option value="">Select Assigned Location</option>
                                 @foreach($credentials['locations'] as $location)
-                                    <option value="{{ $location }}" @selected(old('assigned_location') == $location)>
-                                        {{ $location }}
+                                    <option value="{{ $location->id }}"
+                                        @selected(old('assigned_location') == $location->id)>
+                                        {{ $location->name }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>
@@ -283,13 +284,17 @@
                             <label class="{{ $styles['label'] }}">
                                 Company <span class="text-red-500">*</span>
                             </label>
+
                             <x-forms.select-field name="company" class="{{ $styles['compact'] }}">
                                 <option value="">Select company</option>
+
                                 @foreach($credentials['companies'] as $company)
-                                    <option value="{{ $company }}" @selected(old('company') == $company)>
-                                        {{ $company }}
+                                    <option value="{{ $company->row_id }}"
+                                        @selected(old('company_id') == $company->row_id)>
+                                        {{ $company->company_name }}
                                     </option>
                                 @endforeach
+
                             </x-forms.select-field>
                         </div>
 
@@ -297,9 +302,10 @@
                             <label class="{{ $styles['label'] }}">Designation</label>
                             <x-forms.select-field name="designation" class="{{ $styles['compact'] }}">
                                 <option value="">Select designation</option>
-                                @foreach($credentials['designations'] as $designation)
-                                    <option value="{{ $designation }}" @selected(old('designation') == $designation)>
-                                        {{ $designation }}
+                                 @foreach($credentials['designations'] as $designation)
+                                    <option value="{{ $designation->row_id }}"
+                                        @selected(old('designation') == $designation->row_id)>
+                                        {{ $designation->branch_name }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>
@@ -334,10 +340,11 @@
                         <div class="flex flex-col gap-1">
                             <label class="{{ $styles['label'] }}">Position</label>
                             <x-forms.select-field name="position" class="{{ $styles['compact'] }}">
-                                <option value="">Select position</option>
-                                @foreach($credentials['positions'] as $position)
-                                    <option value="{{ $position }}" @selected(old('position') == $position)>
-                                        {{ $position }}
+                                <option value="">Select Position</option>
+                                 @foreach($credentials['positions'] as $position)
+                                    <option value="{{ $company->row_id }}"
+                                        @selected(old('position') == $position->row_id)>
+                                        {{ $position->position_description }}
                                     </option>
                                 @endforeach
                             </x-forms.select-field>

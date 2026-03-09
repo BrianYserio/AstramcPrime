@@ -4,13 +4,13 @@
     <div class="flex items-center justify-between mb-4">
         <x-breadcrumb :items="[
             ['label' => 'Dashboard', 'active' => false],
-            ['label' => 'Human Resource', 'active' => false],
-            ['label' => 'Employees', 'active' => true]
+            ['label' => 'Purchasing', 'active' => false],
+            ['label' => 'Supplier', 'active' => true]
         ]" />
 
-        <x-add-link href="{{ route('employees.create') }}">
+        <x-add-link href="{{ route('supplier.create') }}">
             <x-addIcon />
-            Employee
+            Supplier
         </x-add-link>
 
     </div>
@@ -47,7 +47,7 @@
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
                         <th class="px-4 py-3 text-left text-[0.68rem] font-bold uppercase tracking-widest text-gray-400 w-10">#</th>
-                        @foreach(['ID.','Name','Position','Branch','Date Hired','Status'] as $col)
+                        @foreach(['Item ID.', 'Item Name', 'Description', 'Date & time'] as $col)
                         <th class="px-4 py-3 text-left text-[0.68rem] font-bold uppercase tracking-widest text-gray-400 cursor-pointer select-none whitespace-nowrap group"
                             onclick="sortTable(this)">
                             <span class="inline-flex items-center gap-1.5">
@@ -61,51 +61,47 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-100" id="table-body">
-                    @foreach ($employees as $i => $employee)
+                    {{-- @foreach ($employees as $i => $employee) --}}
                     <tr class="hover:bg-gray-50 transition-colors duration-100 table-row"
                         data-status="{{-- strtolower($transmittal->status) --}}">
 
                         <td class="px-4 py-3 text-xs text-gray-400 font-mono">$i + 1</td>
 
                         <td class="px-4 py-3 text-xs">
-                            <a href="{{ route('employees.show', $employee->id) }}"
+                            <a href=""
                                class="text-blue-600 hover:text-blue-800 font-semibold font-mono hover:underline">
-                                {{ $employee->employee_id }}
+                                {{-- {{ $employee->employee_id }} --}}
                             </a>
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->first_name }} {{ $employee->last_name }}
+                            {{-- {{ $employee->first_name }} {{ $employee->last_name }} --}}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-700 font-medium">
-                            {{ $employee->position->position_description }}
+                            {{-- {{ $employee->first_name }} {{ $employee->last_name }} --}}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->branch->branch_name }}
+                            {{-- {{ $employee->position->position_description }} --}}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->date_hired }}
+                            {{-- {{ $employee->UserRole?->role }} --}}
                         </td>
 
-                        <td class="px-4 py-3 text-xs">
-                            @php
-                                $s = strtolower($employee->emp_status);
-                                $badge = match($s) {
-                                    'approved','received' => 'bg-green-100 text-green-700 border border-green-200',
-                                    'pending'            => 'bg-yellow-100 text-yellow-700 border border-yellow-200',
-                                    'cancelled'          => 'bg-red-100 text-red-600 border border-red-200',
-                                    default              => 'bg-gray-100 text-gray-600 border border-gray-200',
-                                };
-                            @endphp
-                            <span class="inline-flex items-center gap-1.5 {{ $badge }} text-[0.65rem] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full whitespace-nowrap">
-                                {{ $employee->emp_status }}
-                            </span>
-                        </td>
+                           {{-- @if($employee->is_active == "1")
+                                <td class="px-4 py-3 text-xs">
+                                    <span class="text-green-600">Yes</span>
+                                </td>
+                            @else
+                                <td class="px-4 py-3 text-xs">
+                                    <span class="text-red-600">No</span>
+                                </td>
+                            @endif --}}
+
                     </tr>
-                    @endforeach
+                    {{-- @endforeach --}}
                 </tbody>
             </table>
 

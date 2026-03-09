@@ -36,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('components.icons.addIcon', 'addIcon');
         Blade::component('components.icons.sortIcon', 'sortIcon');
         Blade::component('components.icons.prevIcon', 'prevIcon');
+        Blade::component('components.icons.checkIcon', 'checkIcon');
 
         // Label, Input and icon separately
         Blade::component('components.forms.input-with-icon', 'input-with-icon');

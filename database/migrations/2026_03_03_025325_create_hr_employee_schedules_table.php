@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('hr_employee_schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_id');
-
+            $table->string('employee_id')->unique();
             $table->time('monday_in')->nullable();
             $table->time('monday_out')->nullable();
             $table->time('tuesday_in')->nullable();
@@ -27,7 +26,7 @@ return new class extends Migration
             $table->time('friday_out')->nullable();
             $table->time('saturday_in')->nullable();
             $table->time('saturday_out')->nullable();
-            $table->softDeletes('deleted_at', precision: 0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

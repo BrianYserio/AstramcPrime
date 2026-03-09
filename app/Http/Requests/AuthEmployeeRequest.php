@@ -32,7 +32,7 @@ class AuthEmployeeRequest extends FormRequest
             'civil_status'   => ['required', 'string'],
             'citizenship'    => ['required', 'string'],
             'contactNumber'  => ['required', 'string', 'max:20'],
-            'email'          => ['required', 'email'],
+            'email'          => ['required', 'email','unique:hr_employees,email'],
             'address'        => ['required', 'string'],
             'profile_image'  => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
 
@@ -43,7 +43,7 @@ class AuthEmployeeRequest extends FormRequest
             'level'             => ['required', 'string'],
             'emp_status'             => ['required', 'string'],
             'designation'       => ['required', 'string', 'max:255'],
-            'sub_designation'   => ['nullable', 'string', 'max:255'],
+            'sub_branch'        => ['string', 'max:255'],
             'position'          => ['required', 'string', 'max:100'],
             'assigned_location' => ['required', 'string', 'max:255'],
 

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('hr_employee_position', function (Blueprint $table) {
             $table->id('row_id');
             $table->string('position_description');
-            $table->enum('isActive', ['Yes', 'No'])->default('Yes');
+            $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Branch extends Model
 {
     protected $guarded = [];
-    
-    protected $table = "astra_branch";
+
+    protected $table = "astra_branches";
 }

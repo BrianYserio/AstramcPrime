@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
-    public function index() {
-        $employees = DB::table('hr_employees')->get();
+    public function index()
+    {
+        $employees = Employee::with('position')->get();
 
         return view('dashboard.modules.human-resource.employees.index', [
             'employees' => $employees
@@ -34,42 +35,12 @@ class EmployeeController extends Controller
     public function store(AuthEmployeeRequest $request): RedirectResponse
     {
         $data = $request->validated();
-
-        $days     = $request->input('work_days', []);
-        $timeIn   = $request->input('time_in', []);
-        $timeOut  = $request->input('time_out', []);
-
-        DB::table('hr_employee_schedules')->updateOrInsert(
-            ['employee_id' => $data['employee_id']], // unique key
-            [
-                'monday_in'  => in_array('monday', $days) ? ($timeIn['monday'] ?? null) : null,
-                'monday_out' => in_array('monday', $days) ? ($timeOut['monday'] ?? null) : null,
-
-                'tuesday_in'  => in_array('tuesday', $days) ? ($timeIn['tuesday'] ?? null) : null,
-                'tuesday_out' => in_array('tuesday', $days) ? ($timeOut['tuesday'] ?? null) : null,
-
-                'wednesday_in'  => in_array('wednesday', $days) ? ($timeIn['wednesday'] ?? null) : null,
-                'wednesday_out' => in_array('wednesday', $days) ? ($timeOut['wednesday'] ?? null) : null,
-
-                'thursday_in'  => in_array('thursday', $days) ? ($timeIn['thursday'] ?? null) : null,
-                'thursday_out' => in_array('thursday', $days) ? ($timeOut['thursday'] ?? null) : null,
-
-                'friday_in'  => in_array('friday', $days) ? ($timeIn['friday'] ?? null) : null,
-                'friday_out' => in_array('friday', $days) ? ($timeOut['friday'] ?? null) : null,
-
-                'saturday_in'  => in_array('saturday', $days) ? ($timeIn['saturday'] ?? null) : null,
-                'saturday_out' => in_array('saturday', $days) ? ($timeOut['saturday'] ?? null) : null,
-
-                'updated_at' => now(),
-                'created_at' => now(),
-            ],
-        );
-
-        Employee::create([
+        $employeeIdPreview = EmployeeIdGenerator::generate();
+        $employees = Employee::create([
             // Personal Background
-            'employee_id'    => $data['employee_id'],
+            'employee_id'    => $employeeIdPreview,
             'first_name'     => $data['firstName'],
-            'middle_name'    => $data['middleName'] ?? null,
+            'middle_name'    => $data['middleName']    ?? null,
             'last_name'      => $data['lastName'],
             'birthdate'      => $data['birthdate'],
             'gender'         => $data['gender'],
@@ -83,24 +54,48 @@ class EmployeeController extends Controller
             // Employment Details
             'date_hired'        => $data['date_hired'],
             'date_status'       => $data['date_status'],
-            'company'           => $data['company'],
+            'company_id'           => $data['company'],
             'level'             => $data['level'],
             'emp_status'        => $data['emp_status'],
-            'branch'            => $data['designation'],
-            'sub_branch'        => $data['sub_designation'] ?? null,
-            'position'          => $data['position'],
+            'branch_id'            => $data['designation'],
+            'sub_branch'        => $data['sub_branch'],
+            'employee_position_id'          => $data['position'],
             'assigned_location' => $data['assigned_location'],
 
             // Government Identification
-            'pagibig'     => $data['pagibig_number'] ?? null,
-            'philhealth'  => $data['philhealth_number'] ?? null,
-            'sss'         => $data['sss_number'] ?? null,
-            'tin'         => $data['tin_number'] ?? null,
+            'pagibig'    => $data['pagibig_number']    ?? null,
+            'philhealth' => $data['philhealth_number'] ?? null,
+            'sss'        => $data['sss_number']        ?? null,
+            'tin'        => $data['tin_number']        ?? null,
         ]);
 
+        $employees->employeeSchedule()->create(
+            $this->buildSchedulePayload(
+                $request->input('work_days', []),
+                $request->input('time_in',   []),
+                $request->input('time_out',  []),
+            )
+        );
+
         return redirect()
-            ->route('employees.index',)
+            ->route('employees.index')
             ->with('success', "Employee {$data['employee_id']} created successfully!");
+    }
+
+    private function buildSchedulePayload(array $days, array $timeIn, array $timeOut): array
+    {
+        $schedule = [];
+
+        $weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+        foreach ($weekdays as $day) {
+            $isActive = in_array($day, $days);
+
+            $schedule["{$day}_in"]  = $isActive ? ($timeIn[$day]  ?? null) : null;
+            $schedule["{$day}_out"] = $isActive ? ($timeOut[$day] ?? null) : null;
+        }
+
+        return $schedule;
     }
 
     public function show(EmployeeCredentials $service, string $id) {
@@ -177,7 +172,7 @@ class EmployeeController extends Controller
             'level'             => $data['level'],
             'emp_status'        => $data['emp_status'],
             'branch'            => $data['designation'],
-            'sub_branch'        => $data['sub_designation'] ?? null,
+            'sub_branch'        => $data['sub_branch'],
             'position'          => $data['position'],
             'assigned_location' => $data['assigned_location'],
 

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id('row_id');
             $table->string('branch_id');
             $table->string('branch_name');
-            $table->enum('isActive', ['Yes', 'No'])->default('Yes');
+            $table->boolean('is_active')->default(true);
             $table->enum('bytype', ['Department', 'Branch', 'Sub-department'])->default('Department');
-            $table->softDeletes('deleted_at', precision: 0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

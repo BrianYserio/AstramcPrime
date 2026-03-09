@@ -16,34 +16,33 @@ class Employee extends Model
     // app/Models/Employee.php
     protected $guarded = [];
 
-    public function user()
+    public function userAccount()
     {
-        return $this->hasOne(UserAccount::class);
+        return $this->belongsTo(UserAccount::class, 'user_id', 'id');
     }
-
-    public function schedule()
+    public function employeeSchedule()
     {
-        return $this->hasOne(EmployeeSchedule::class, 'employee_id');
+        return $this->hasOne(EmployeeSchedule::class, 'employee_id', 'employee_id');
     }
 
     public function position()
     {
-        return $this->belongsTo(EmployeePosition::class, 'position');
+       return $this->belongsTo(EmployeePosition::class, 'employee_position_id', 'row_id');
     }
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company');
+        return $this->belongsTo(Company::class, 'company_id' ,'row_id');
     }
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class, 'branch');
+        return $this->belongsTo(Branch::class, 'branch_id', 'row_id');
     }
 
     public function location()
     {
-        return $this->belongsTo(AssignedLocation::class, 'assigned_location');
+        return $this->belongsTo(AssignedLocation::class, 'assigned_location', 'id');
     }
 
 }

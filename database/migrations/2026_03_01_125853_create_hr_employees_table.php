@@ -3,6 +3,7 @@
 use App\Models\Branch;
 use App\Models\Company;
 use App\Models\human_resource\EmployeePosition;
+use App\Models\Users\UserAccount;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,8 @@ return new class extends Migration
             $table->id();
 
             // 🔐 Identity
-            $table->string('employee_id')->unique();
+            $table->foreignIdFor('employee_id')->unique();
+            $table->foreignIdFor(UserAccount::class)->constrained()->cascadeOnDelete();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
@@ -35,12 +37,12 @@ return new class extends Migration
             // 🏢 Employment Details
             $table->date('date_hired')->nullable();
             $table->date('date_status')->nullable();
-            $table->foreignIdFor(EmployeePosition::class);
+            $table->foreignIdFor(EmployeePosition::class)->constrained()->cascadeOnDelete();
             $table->string('emp_status')->nullable();
             // If you have astra_companies table:
-            $table->foreignIdFor(Company::class);
+            $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete();
             $table->string('level')->nullable();
-            $table->foreignIdFor(Branch::class);
+            $table->foreignIdFor(Branch::class)->constrained()->cascadeOnDelete();
             $table->string('sub_branch')->nullable();
             $table->string('assigned_location')->nullable();
 
@@ -54,7 +56,6 @@ return new class extends Migration
             $table->decimal('ml_balance', 8, 2)->default(0);
             $table->decimal('pl_balance', 8, 2)->default(0);
             $table->decimal('spl_balance', 8, 2)->default(0);
-
             $table->decimal('paid_vl', 8, 2)->default(0);
 
             // 🏦 Government Numbers
@@ -72,7 +73,7 @@ return new class extends Migration
             $table->string('healthcare_benefits_level')->nullable();
 
             $table->string('prepared_by')->nullable();
-            $table->softDeletes('deleted_at', precision: 0);
+            $table->softDeletes();
             $table->timestamps(); // includes created_at & updated_at
         });
     }

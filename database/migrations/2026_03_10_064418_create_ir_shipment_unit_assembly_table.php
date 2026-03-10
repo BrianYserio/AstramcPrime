@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hr_employee_position', function (Blueprint $table) {
+        Schema::create('ir_shipment_unit_assembly', function (Blueprint $table) {
             $table->id('row_id');
-            $table->string('position_description');
+            $table->string('complete_description');
+            $table->string('a_type');
+            $table->string('remarks');
             $table->boolean('is_active')->default(true);
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hr_employee_position');
+        Schema::dropIfExists('ir_shipment_unit_assembly');
     }
 };

@@ -23,12 +23,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
+            UserRoleSeeder::class,
             UserAccountSeeder::class,
             AstraBranchSeeder::class,
             HrEmployeeAssignedLocationSeeder::class,
             HrEmployeePositionSeeder::class,
-            UserRoleSeeder::class,
             AstraCompanySeeder::class,
+            UnitAssemblySeeder::class
         ]);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Users\UserAccount;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_account_branchs', function (Blueprint $table) {
+        Schema::create('user_roles', function (Blueprint $table) {
             $table->id('row_id')->index()->unique();
-            $table->foreignIdFor(UserAccount::class)->constrained()->cascadeOnDelete();
-            $table->string('company');
-            $table->string('branch');
-            $table->softDeletes();
+            $table->string('role_id')->unique();
+            $table->text('role_description');
+            $table->string('permission')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_account_branchs');
+        Schema::dropIfExists('user_roles');
     }
 };

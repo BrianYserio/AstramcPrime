@@ -13,6 +13,33 @@ return new class extends Migration
     {
        Schema::create('wh_unit_management', function (Blueprint $table) {
             $table->id('row_id');
+            $table->string('unit_id')->unique();
+            $table->string('body_type');
+            $table->string('horse_type');
+            $table->string('cabin_type');
+            $table->string('engine_series')->nullable();
+            $table->string('make');
+            $table->string('unit_type');
+            $table->string('sub_unit_type');
+            $table->string('num_wheels');
+            $table->string('icondition');
+            $table->decimal('uprice', 12, 2);
+            $table->decimal('gvw', 12, 2);
+            $table->string('remarks');
+            $table->string('prepared_by'); // employee id
+
+            $table->foreignId('company_id')->constrained(
+                table: 'astra_company',
+                column: 'row_id' // <--- THIS IS THE FIX
+            )->cascadeOnDelete();
+            $table->foreignId('branch_id')->constrained(
+                table: 'astra_branches',
+                column: 'row_id' // <--- THIS IS THE FIX
+            )->cascadeOnDelete();
+
+            $table->boolean('is_active')->default(true);
+            $table->decimal('promo_price', 12, 2);
+            $table->boolean('visible')->default(true);
             $table->timestamps();
         });
     }

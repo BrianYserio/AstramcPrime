@@ -3,14 +3,15 @@
 namespace App\Http\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
-class EmployeeIdGenerator
+class UnitIdGenerator
 {
     public static function generate($prefix = 'SU', $resetYearly = true)
     {
         return DB::transaction(function () use ($prefix, $resetYearly) {
 
-            $year = date('Y');
+            $year = Carbon::now()->format('y');
 
             $query = DB::table('wh_unit_management');
 
@@ -19,7 +20,7 @@ class EmployeeIdGenerator
             }
 
             $latest = $query->lockForUpdate()
-                            ->orderByDesc('id')
+                            ->orderByDesc('unit_id')
                             ->first();
 
             if (!$latest) {
@@ -30,7 +31,7 @@ class EmployeeIdGenerator
             }
 
             return sprintf(
-                "%s-%s-%04d",
+                "%s%s%04d",
                 $prefix,
                 $year,
                 $number

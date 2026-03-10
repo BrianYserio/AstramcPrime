@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hr_employee_assigned_location', function (Blueprint $table) {
-            $table->id();
+            $table->id('row_id')->index()->unique();
             $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

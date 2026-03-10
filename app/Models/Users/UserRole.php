@@ -16,7 +16,7 @@ class UserRole extends Model
 
     public function accounts(): HasMany
     {
-        return $this->hasMany(UserAccount::class, 'role', 'role_id');
+        return $this->hasMany(UserAccount::class, 'role_code', 'row_id');
     }
 
     // belongs to many permissions (via stored access_id list)

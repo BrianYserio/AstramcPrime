@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Users\UserAccount;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_account_branchs', function (Blueprint $table) {
+        Schema::create('astra_branches', function (Blueprint $table) {
             $table->id('row_id')->index()->unique();
-            $table->foreignIdFor(UserAccount::class)->constrained()->cascadeOnDelete();
-            $table->string('company');
-            $table->string('branch');
+            $table->string('branch_id');
+            $table->string('branch_name');
+            $table->boolean('is_active')->default(true);
+            $table->enum('bytype', ['Department', 'Branch', 'Sub-department'])->default('Department');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_account_branchs');
+        Schema::dropIfExists('astra_branches');
     }
 };

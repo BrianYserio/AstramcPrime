@@ -6,7 +6,6 @@ use App\Models\Branch;
 use App\Models\Company;
 use App\Models\human_resource\AssignedLocation;
 use App\Models\human_resource\EmployeePosition;
-use Illuminate\Support\Facades\DB;
 
 class EmployeeCredentials
 {
@@ -47,7 +46,7 @@ class EmployeeCredentials
 
     private function getLocation()
     {
-        return AssignedLocation::select('id', 'name')
+        return AssignedLocation::select('row_id', 'name')
         ->orderBy('name')
         ->get();
     }

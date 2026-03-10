@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeIdGenerator
@@ -10,12 +11,12 @@ class EmployeeIdGenerator
     {
         return DB::transaction(function () use ($prefix, $resetYearly) {
 
-            $year = date('Y');
+            $year = Carbon::now()->format('y');
 
             $query = DB::table('hr_employees');
 
             if ($resetYearly) {
-                $query->where('employee_id', 'like', "{$prefix}-{$year}-%");
+                $query->where('employee_id', 'like', "{$prefix}{$year}%");
             }
 
             $latest = $query->lockForUpdate()
@@ -30,7 +31,7 @@ class EmployeeIdGenerator
             }
 
             return sprintf(
-                "%s-%s-%04d",
+                "%s%s%04d",
                 $prefix,
                 $year,
                 $number

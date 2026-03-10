@@ -57,7 +57,7 @@
         }
     </script>
 
-    <form action="{{ route('units.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="space-y-4">
 
@@ -107,37 +107,40 @@
                                         Unit ID
                                         <span class="ml-1 text-[0.6rem] font-normal normal-case tracking-normal text-blue-400 bg-blue-50 px-1.5 py-0.5 rounded">Auto-generated</span>
                                     </label>
-                                    <input type="text" name="employee_id" value="{{--  --}}" readonly
+                                    <input type="text" name="employee_id" value="{{ $unitIdPreview }}" readonly
                                            class="{{ $styles['readonly'] }} {{ $styles['compact'] }}" />
                                 </div>
 
                                 <div>
                                     <label class="{{ $styles['label'] }}">Cabin Type</label>
-                                    <x-forms.select-field name="gender" class="{{ $styles['compact'] }}">
+                                    <x-forms.select-field name="cabin_type" class="{{ $styles['compact'] }}">
                                         <option value="">Select Cabin Type</option>
 
-                                        {{-- @foreach($credentials['genders'] as $gender)
-                                            <option value="{{ $gender }}"
-                                                @selected(old('gender', $employees->gender ?? '') == $gender)>
-                                                {{ $gender }}
+                                        {{-- @foreach($unit_assembly as $units)
+                                            <option value="{{ $units }}"
+                                                @selected(old('make', $unit_assembly->units ?? '') == $units)>
+                                                {{ $units }}
                                             </option>
                                         @endforeach --}}
 
                                     </x-forms.select-field>
                                 </div>
 
+                                {{-- Unit Type Selection --}}
                                 <div>
                                     <label class="{{ $styles['label'] }}">Unit Type</label>
-                                    <x-forms.select-field name="gender" class="{{ $styles['compact'] }}">
-                                        <option value="">Select Unit Type</option>
 
-                                        {{-- @foreach($credentials['genders'] as $gender)
-                                            <option value="{{ $gender }}"
-                                                @selected(old('gender', $employees->gender ?? '') == $gender)>
-                                                {{ $gender }}
+                                    <x-forms.select-field name="unit_type" class="{{ $styles['compact'] }}">
+                                        <option value="" disabled selected>Select Unit Type</option>
+
+                                        @foreach($units['units_assembly'] as $unitType)
+                                            <option
+                                                value="{{ $unitType }}"
+                                                @selected(old('unit_type', $selectedUnitType ?? '') === $unitType)
+                                            >
+                                                {{ $unitType }}
                                             </option>
-                                        @endforeach --}}
-
+                                        @endforeach
                                     </x-forms.select-field>
                                 </div>
 
@@ -158,15 +161,15 @@
 
                                 <div>
                                     <label class="{{ $styles['label'] }}">Make</label>
-                                    <x-forms.select-field name="gender" class="{{ $styles['compact'] }}">
+                                    <x-forms.select-field name="make" class="{{ $styles['compact'] }}">
                                         <option value="">Select Make</option>
 
-                                        {{-- @foreach($credentials['genders'] as $gender)
-                                            <option value="{{ $gender }}"
-                                                @selected(old('gender', $employees->gender ?? '') == $gender)>
-                                                {{ $gender }}
+                                        @foreach($unitAssemblies as $units)
+                                            <option value="{{ $units->row_id }}"
+                                                @selected(old('make') == $units)>
+                                                {{ $units->complete_description }}
                                             </option>
-                                        @endforeach --}}
+                                        @endforeach
 
                                     </x-forms.select-field>
                                 </div>
@@ -188,18 +191,21 @@
                                 </div>
 
 
+                                {{-- Unit Type Selection --}}
                                 <div>
                                     <label class="{{ $styles['label'] }}">Body Type</label>
-                                    <x-forms.select-field name="gender" class="{{ $styles['compact'] }}">
-                                        <option value="">Select Body Type</option>
 
-                                        {{-- @foreach($credentials['genders'] as $gender)
-                                            <option value="{{ $gender }}"
-                                                @selected(old('gender', $employees->gender ?? '') == $gender)>
-                                                {{ $gender }}
+                                    <x-forms.select-field name="body_type" class="{{ $styles['compact'] }}">
+                                        <option value="" disabled selected>Select Body Type</option>
+
+                                        {{-- @foreach($units['units_assembly'] as $unitType)
+                                            <option
+                                                value="{{ $unitType }}"
+                                                @selected(old('unit_type', $selectedUnitType ?? '') === $unitType)
+                                            >
+                                                {{ $unitType }}
                                             </option>
                                         @endforeach --}}
-
                                     </x-forms.select-field>
                                 </div>
 
@@ -233,7 +239,7 @@
                                         Prepared By:
                                         <span class="ml-1 text-[0.6rem] font-normal normal-case tracking-normal text-blue-400 bg-blue-50 px-1.5 py-0.5 rounded">Auto-generated from user</span>
                                     </label>
-                                    <input type="text" name="employee_id" value="{{--  --}}" readonly
+                                    <input type="text" name="employee_id" value="" readonly
                                            class="{{ $styles['readonly'] }} {{ $styles['compact'] }}" />
                                 </div>
 

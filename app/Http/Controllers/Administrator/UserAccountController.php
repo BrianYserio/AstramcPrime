@@ -27,7 +27,7 @@ class UserAccountController extends Controller
             ->get();
 
         $branches = DB::table('astra_branches')
-        ->where('isActive', 'Yes')
+        ->where('is_active', 1)
         ->pluck('branch_name', 'branch_id');
         // [id => name]
 
@@ -55,7 +55,7 @@ class UserAccountController extends Controller
                 ->get();
 
         $branches = DB::table('astra_branches')
-        ->where('isActive', 'Yes')
+        ->where('is_active', 1)
         ->pluck('branch_name', 'branch_id');
         // [id => name]
 

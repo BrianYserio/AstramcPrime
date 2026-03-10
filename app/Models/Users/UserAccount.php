@@ -8,14 +8,16 @@ use App\Models\Users\UserRole;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Spatie\Permission\Traits\HasRoles;
 
 class UserAccount extends Authenticatable
 {
-    use HasRoles;
-    
+
+use Notifiable;
+
     protected $table = 'user_accounts';
+    protected $primaryKey = 'row_id'; // Since you used row_id
 
     protected $guarded= [];
 

@@ -262,8 +262,8 @@
                             <x-forms.select-field name="assigned_location" class="{{ $styles['compact'] }}">
                                 <option value="">Select Assigned Location</option>
                                 @foreach($credentials['locations'] as $location)
-                                    <option value="{{ $location->id }}"
-                                        @selected(old('assigned_location') == $location->id)>
+                                    <option value="{{ $location->row_id }}"
+                                        @selected(old('assigned_location') == $location->row_id)>
                                         {{ $location->name }}
                                     </option>
                                 @endforeach
@@ -342,7 +342,7 @@
                             <x-forms.select-field name="position" class="{{ $styles['compact'] }}">
                                 <option value="">Select Position</option>
                                  @foreach($credentials['positions'] as $position)
-                                    <option value="{{ $company->row_id }}"
+                                    <option value="{{ $position->row_id }}"
                                         @selected(old('position') == $position->row_id)>
                                         {{ $position->position_description }}
                                     </option>

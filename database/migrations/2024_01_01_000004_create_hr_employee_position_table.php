@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('astra_branches', function (Blueprint $table) {
-            $table->id('row_id');
-            $table->string('branch_id');
-            $table->string('branch_name');
+        Schema::create('hr_employee_position', function (Blueprint $table) {
+            $table->id('row_id')->index()->unique();
+            $table->string('position_description');
             $table->boolean('is_active')->default(true);
-            $table->enum('bytype', ['Department', 'Branch', 'Sub-department'])->default('Department');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('astra_branches');
+        Schema::dropIfExists('hr_employee_position');
     }
 };

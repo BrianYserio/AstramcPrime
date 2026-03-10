@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Users\UserRole;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserRoleSeeder extends Seeder
 {
@@ -18,6 +18,7 @@ class UserRoleSeeder extends Seeder
                 'role_description' => 'Superuser',
                 'created_at' => now(),
                 'updated_at' => now()
+
             ],
             [
                 'role_id' => 'R001',
@@ -328,6 +329,6 @@ class UserRoleSeeder extends Seeder
             ],
 
         ];
-    DB::table('user_roles')->insert($user_role);
+    UserRole::insert($user_role);
     }
 }

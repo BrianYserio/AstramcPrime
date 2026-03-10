@@ -36,6 +36,7 @@ class EmployeeController extends Controller
     {
         $data = $request->validated();
         $employeeIdPreview = EmployeeIdGenerator::generate();
+
         $employees = Employee::create([
             // Personal Background
             'employee_id'    => $employeeIdPreview,
@@ -50,6 +51,7 @@ class EmployeeController extends Controller
             'email'          => $data['email'],
             'address'        => $data['address'],
             'profile_image'  => $this->uploadProfileImage($request),
+            'position_id' => $data['position'],
 
             // Employment Details
             'date_hired'        => $data['date_hired'],
@@ -59,7 +61,6 @@ class EmployeeController extends Controller
             'emp_status'        => $data['emp_status'],
             'branch_id'            => $data['designation'],
             'sub_branch'        => $data['sub_branch'],
-            'employee_position_id'          => $data['position'],
             'assigned_location' => $data['assigned_location'],
 
             // Government Identification

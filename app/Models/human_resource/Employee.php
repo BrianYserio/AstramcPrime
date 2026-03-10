@@ -18,7 +18,7 @@ class Employee extends Model
 
     public function userAccount()
     {
-        return $this->belongsTo(UserAccount::class, 'user_id', 'id');
+        return $this->belongsTo(UserAccount::class, 'user_id', 'row_id');
     }
     public function employeeSchedule()
     {
@@ -27,7 +27,7 @@ class Employee extends Model
 
     public function position()
     {
-       return $this->belongsTo(EmployeePosition::class, 'employee_position_id', 'row_id');
+       return $this->belongsTo(EmployeePosition::class, 'position_id', 'row_id');
     }
 
     public function company()
@@ -42,7 +42,7 @@ class Employee extends Model
 
     public function location()
     {
-        return $this->belongsTo(AssignedLocation::class, 'assigned_location', 'id');
+        return $this->belongsTo(AssignedLocation::class, 'assigned_location', 'row_id');
     }
 
 }

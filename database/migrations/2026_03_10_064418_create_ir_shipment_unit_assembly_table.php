@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ir_shipment_unit_assembly', function (Blueprint $table) {
             $table->id('row_id');
-            $table->string('complete_description');
+            $table->string('cdescription');
             $table->string('a_type');
             $table->string('remarks');
             $table->boolean('is_active')->default(true);

@@ -52,15 +52,19 @@ Route::get('/create',  'create')->name('create');
 });
 
 
-Route::controller(UnitController::class)
-        ->prefix('warehouse/units')
-        ->name('units.')
-        ->group(function() {
-Route::get('/',        'index')->name('index');
-Route::get('/create',  'create')->name('create');
-// Route::post('/',       'store')->name('store');
-// Route::get('/{id}',    'show')   ->name('show');
-});
+
 // Route::patch('user-accounts/{id}/info',        [..., 'update.info']);
 // Route::patch('user-accounts/{id}/credentials', [..., 'update.credentials']);
 // Route::patch('user-accounts/{id}/permissions', [..., 'update.permissions']);
+// Protected routes
+Route::middleware(['auth'])->group(function () {
+        Route::controller(UnitController::class)
+            ->prefix('warehouse/units')
+            ->name('units.')
+            ->group(function() {
+    Route::get('/',        'index')->name('index');
+    Route::get('/create',  'create')->name('create');
+    Route::post('/',       'store')->name('store');
+    // Route::get('/{id}',    'show')   ->name('show');
+    });
+});

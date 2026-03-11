@@ -3,27 +3,61 @@
 namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Warehouse\CreateUnitAssemblyRequest;
 use App\Http\Services\UnitAssemblyCredentials;
 use App\Http\Services\UnitIdGenerator;
-use App\Models\human_resource\Employee;
 use App\Models\Warehouse\UnitAssembly;
+use App\Models\Warehouse\UnitManagement;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UnitController extends Controller
 {
     public function index() {
-        return view('dashboard.modules.warehouse.units.index');
+        $units = UnitAssembly::all();
+        return view('dashboard.modules.warehouse.units.index', compact('units'));
     }
 
-    public function create(UnitAssemblyCredentials $service) {
+    public function create(UnitAssemblyCredentials $service)
+    {
+        $assemblies = UnitAssembly::whereIn('remarks', ['Make', 'Cabin', 'Body', 'Power', 'Wheels'])
+            ->orderBy('cdescription')->get()->groupBy('remarks');
 
         return view('dashboard.modules.warehouse.units.create', [
-            'unitIdPreview'   => UnitIdGenerator::generate(),
-            'unitAssemblies'  => UnitAssembly::orderBy('complete_description')->get(),
-            'units'           => $service->getUnitCredentials(),
+            'unitIdPreview' => UnitIdGenerator::generate(),
+            'units'         => $service->getUnitCredentials(),
+            'conditions'    => $service->getUnitCredentials(),
+            'makes'         => $assemblies->get('Make'),
+            'cabins'        => $assemblies->get('Cabin'),
+            'bodies'        => $assemblies->get('Body'),
+            'powers'        => $assemblies->get('Power'),
+            'wheels'        => $assemblies->get('Wheels'),
         ]);
     }
 
-    public function store() {
+    public function store(CreateUnitAssemblyRequest $request): RedirectResponse
+    {
+        $employee = $request->user()->employee;
+        $company  = $employee->company;
+        $branch   = $employee->branch;
 
+        $data     = $request->validated();
+
+        UnitManagement::create([
+            'unit_id'       => UnitIdGenerator::generate(),
+            'cabin_type'    => $data['cabin_type'],
+            'unit_type'     => $data['unit_type'] ?? null,
+            'num_wheels'    => $data['wheels'],
+            'make'          => $data['make'],
+            'condition'     => $data['condition'],   // ✅ fixed typo still present
+            'body_type'     => $data['body_type'],
+            'gvw'           => $data['gvw'],
+            'horse_type'    => $data['horse_power'],
+            'prepared_by'   => $data['user_name'],
+            'engine_series' => $data['engine'],
+            'company_id'    => $company->id,
+            'branch_id'     => $branch->id,
+        ]);
+
+        return redirect()->route('units.index');
     }
 }

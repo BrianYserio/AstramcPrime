@@ -2,11 +2,13 @@
 
 namespace App\Models\Users;
 
+use App\Models\Company;
 use App\Models\human_resource\Employee;
 use App\Models\Users\UserAccountBranch;
 use App\Models\Users\UserRole;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -32,7 +34,7 @@ use Notifiable;
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id', 'user_id');
     }
 
     public function userRoles()
@@ -42,12 +44,22 @@ use Notifiable;
 
     public function role(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'role', 'role_id');
+        return $this->belongsTo(Employee::class);
     }
 
     public function branches(): HasMany
     {
-        return $this->hasMany(UserAccountBranch::class, 'id', 'id');
+        return $this->hasMany(UserAccountBranch::class);
+    }
+
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class);
+    }
+
+    public function findForPassport($username)
+    {
+        return $this->where('username', $username)->first();
     }
 
     protected static function boot()

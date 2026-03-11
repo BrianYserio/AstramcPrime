@@ -13,6 +13,11 @@ return [
         'MODIFIED MEDIUM',
         'MODIFIED HEAVY',
         'SPECIAL UNIT'
+    ],
+
+    'condition' => [
+        'Brand New',
+        'Refurbished'
     ]
 
 ];

@@ -20,12 +20,12 @@ return new class extends Migration
             $table->string('engine_series')->nullable();
             $table->string('make');
             $table->string('unit_type');
-            $table->string('sub_unit_type');
+            $table->string('sub_unit_type')->nullable();
             $table->string('num_wheels');
             $table->string('icondition');
-            $table->decimal('uprice', 12, 2);
+            $table->decimal('uprice', 12, 2)->nullable();
             $table->decimal('gvw', 12, 2);
-            $table->string('remarks');
+            $table->string('remarks')->nullable();;
             $table->string('prepared_by'); // employee id
 
             $table->foreignId('company_id')->constrained(
@@ -38,7 +38,7 @@ return new class extends Migration
             )->cascadeOnDelete();
 
             $table->boolean('is_active')->default(true);
-            $table->decimal('promo_price', 12, 2);
+            $table->decimal('promo_price', 12, 2)->nullable();
             $table->boolean('visible')->default(true);
             $table->timestamps();
         });

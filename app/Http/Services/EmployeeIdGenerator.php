@@ -20,7 +20,7 @@ class EmployeeIdGenerator
             }
 
             $latest = $query->lockForUpdate()
-                            ->orderByDesc('id')
+                            ->orderByDesc('employee_id')
                             ->first();
 
             if (!$latest) {

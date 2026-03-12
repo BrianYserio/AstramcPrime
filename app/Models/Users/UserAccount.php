@@ -11,15 +11,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class UserAccount extends Authenticatable
 {
 
-use Notifiable;
+    use Notifiable;
 
     protected $table = 'user_accounts';
-    protected $primaryKey = 'row_id'; // Since you used row_id
+
+    protected $primaryKey = 'user_id'; // Since you used row_id
 
     protected $guarded= [];
 
@@ -32,9 +34,9 @@ use Notifiable;
         'api_token',
     ];
 
-    public function employee()
+    public function employee(): HasOne
     {
-        return $this->belongsTo(Employee::class, 'employee_id', 'user_id');
+        return $this->hasOne(Employee::class);
     }
 
     public function userRoles()
@@ -68,6 +70,14 @@ use Notifiable;
 
         static::creating(function ($user) {
             $user->api_token = Str::random(60);
+        });
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $last = self::orderBy('row_id', 'desc')->first();
+            $model->row_id = $last ? $last->row_id + 1 : 1;
         });
     }
 }

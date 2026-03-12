@@ -57,7 +57,7 @@
         }
     </script>
 
-    <form action="{{ route('employees.update', $employees->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('employees.update', $employees->employee_id) }}" method="POST" enctype="multipart/form-data">
         @csrf
     @method('PUT')
         <div class="space-y-4">
@@ -273,7 +273,7 @@
 
                                 @foreach($credentials['locations'] as $location)
                                     <option value="{{ $location->id }}"
-                                        @selected(old('assigned_location', $employees->assigned_location) == $location->id)>
+                                        @selected(old('assigned_location', $employees->assigned_location) == $location->row_id)>
                                         {{ $location->name }}
                                     </option>
                                 @endforeach

@@ -32,4 +32,12 @@ class UnitManagement extends Model
     {
         return $query->where('branch_id', $branchId);
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $last = self::orderBy('row_id', 'desc')->first();
+            $model->row_id = $last ? $last->row_id + 1 : 1;
+        });
+    }
 }

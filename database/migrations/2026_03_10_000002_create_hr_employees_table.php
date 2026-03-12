@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Branch;
+use App\Models\Company;
+use App\Models\human_resource\EmployeePosition;
+use App\Models\Users\UserAccount;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +16,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hr_employees', function (Blueprint $table) {
-            $table->id()->index()->unique();
-
-            // Identity
-            $table->string('employee_id')->unique();
+            $table->bigInteger('row_id')->unsigned();
+            $table->string('employee_id')->primary()->unique();
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
@@ -30,18 +32,9 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('profile_image')->nullable();
 
-            // Employment Details
-            $table->foreignId('position_id')
-                ->constrained(table: 'hr_employee_position', column: 'row_id')
-                ->cascadeOnDelete();
-
-            $table->foreignId('company_id')
-                ->constrained(table: 'astra_company', column: 'row_id')
-                ->cascadeOnDelete();
-
-            $table->foreignId('branch_id')
-                ->constrained(table: 'astra_branches', column: 'row_id')
-                ->cascadeOnDelete();
+            $table->foreignIdFor(EmployeePosition::class);
+            $table->foreignIdFor(Company::class);
+            $table->foreignIdFor(Branch::class);
 
             $table->date('date_hired')->nullable();
             $table->date('date_status')->nullable();

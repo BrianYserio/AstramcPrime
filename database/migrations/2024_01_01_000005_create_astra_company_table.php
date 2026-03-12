@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('astra_company', function (Illuminate\Database\Schema\Blueprint $table) {
-            $table->id('row_id')->index()->unique(); // Primary Key
-
-            $table->string('company_id')->unique(); // Custom company ID
+            $table->id('row_id');
+            $table->string('company_id')->unique(); // Primary Key
             $table->string('company_name');
             $table->string('code')->nullable();
 

@@ -7,11 +7,13 @@ use App\Http\Requests\AuthEmployeeRequest;
 use App\Http\Services\EmployeeCredentials;
 use App\Http\Services\EmployeeIdGenerator;
 use App\Models\human_resource\Employee;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $employees = Employee::with('position')->get();
@@ -21,8 +23,11 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function create(EmployeeCredentials $service) {  // use service for clearer and maintainable
-
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(EmployeeCredentials $service)
+    {
         $employeeIdPreview = EmployeeIdGenerator::generate();
         $credentials = $service->getCredentials();
 
@@ -32,12 +37,15 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function store(AuthEmployeeRequest $request): RedirectResponse
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(AuthEmployeeRequest $request)
     {
         $data = $request->validated();
         $employeeIdPreview = EmployeeIdGenerator::generate();
 
-        $employees = Employee::create([
+        $employees = Employee::with( [
             // Personal Background
             'employee_id'    => $employeeIdPreview,
             'first_name'     => $data['firstName'],
@@ -51,15 +59,15 @@ class EmployeeController extends Controller
             'email'          => $data['email'],
             'address'        => $data['address'],
             'profile_image'  => $this->uploadProfileImage($request),
-            'position_id' => $data['position'],
+            'employee_position_row_id' => $data['position'],
 
             // Employment Details
             'date_hired'        => $data['date_hired'],
             'date_status'       => $data['date_status'],
-            'company_id'           => $data['company'],
+            'company_company_id'   => $data['company'],
             'level'             => $data['level'],
             'emp_status'        => $data['emp_status'],
-            'branch_id'            => $data['designation'],
+            'branch_branch_id'            => $data['designation'],
             'sub_branch'        => $data['sub_branch'],
             'assigned_location' => $data['assigned_location'],
 
@@ -83,24 +91,11 @@ class EmployeeController extends Controller
             ->with('success', "Employee {$data['employee_id']} created successfully!");
     }
 
-    private function buildSchedulePayload(array $days, array $timeIn, array $timeOut): array
+    /**
+     * Display the specified resource.
+     */
+    public function show(EmployeeCredentials $service, string $id)
     {
-        $schedule = [];
-
-        $weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-
-        foreach ($weekdays as $day) {
-            $isActive = in_array($day, $days);
-
-            $schedule["{$day}_in"]  = $isActive ? ($timeIn[$day]  ?? null) : null;
-            $schedule["{$day}_out"] = $isActive ? ($timeOut[$day] ?? null) : null;
-        }
-
-        return $schedule;
-    }
-
-    public function show(EmployeeCredentials $service, string $id) {
-
         $credentials = $service->getCredentials();
         $employees = Employee::findOrFail($id);
         return view('dashboard.modules.human-resource.employees.show', [
@@ -109,8 +104,11 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function edit(EmployeeCredentials $service, string $id) {  // use service for clearer and maintainable
-
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(EmployeeCredentials $service, string $id)
+    {
         $credentials = $service->getCredentials();
         $employees = Employee::findOrFail($id);
         return view('dashboard.modules.human-resource.employees.edit', [
@@ -119,7 +117,10 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function update(AuthEmployeeRequest $request): RedirectResponse
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(AuthEmployeeRequest $request)
     {
         $data = $request->validated();
 
@@ -189,10 +190,34 @@ class EmployeeController extends Controller
             ->with('success', "Employee {$data['employee_id']} created successfully!");
     }
 
-    private function uploadProfileImage(AuthEmployeeRequest $request): ?string
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        return $request->hasFile('profile_image')
-            ? $request->file('profile_image')->store('profile_images', 'public')
-            : null;
+        //
     }
+
+    private function buildSchedulePayload(array $days, array $timeIn, array $timeOut): array
+    {
+        $schedule = [];
+
+        $weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+        foreach ($weekdays as $day) {
+            $isActive = in_array($day, $days);
+
+            $schedule["{$day}_in"]  = $isActive ? ($timeIn[$day]  ?? null) : null;
+            $schedule["{$day}_out"] = $isActive ? ($timeOut[$day] ?? null) : null;
+        }
+
+        return $schedule;
+    }
+
+     private function uploadProfileImage(AuthEmployeeRequest $request): ?string
+        {
+            return $request->hasFile('profile_image')
+                ? $request->file('profile_image')->store('profile_images', 'public')
+                : null;
+        }
 }

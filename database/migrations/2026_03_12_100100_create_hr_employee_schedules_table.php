@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\human_resource\Employee;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,6 @@ return new class extends Migration
     {
         Schema::create('hr_employee_schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_id')->unique();
             $table->time('monday_in')->nullable();
             $table->time('monday_out')->nullable();
             $table->time('tuesday_in')->nullable();

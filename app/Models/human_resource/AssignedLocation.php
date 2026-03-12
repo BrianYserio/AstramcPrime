@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class AssignedLocation extends Model
 {
     protected $guarded = [];
-    
+
     protected $table = "hr_employee_assigned_location";
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class, 'assigned_location', 'row_id');
+    }
 }

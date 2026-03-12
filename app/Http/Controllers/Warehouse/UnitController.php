@@ -36,11 +36,13 @@ class UnitController extends Controller
 
     public function store(CreateUnitAssemblyRequest $request): RedirectResponse
     {
-        $employee = $request->user()->employee;
-        $company  = $employee->company;
-        $branch   = $employee->branch;
+        $employee = $request->user()->load('employee.company', 'employee.branch')->employee;
 
-        $data     = $request->validated();
+        abort_if(is_null($employee), 403, 'No employee record linked to this user.');
+        abort_if(is_null($employee->company), 403, 'Employee has no associated company.');
+        abort_if(is_null($employee->branch), 403, 'Employee has no associated branch.');
+
+        $data = $request->validated();
 
         UnitManagement::create([
             'unit_id'       => UnitIdGenerator::generate(),
@@ -48,14 +50,14 @@ class UnitController extends Controller
             'unit_type'     => $data['unit_type'] ?? null,
             'num_wheels'    => $data['wheels'],
             'make'          => $data['make'],
-            'condition'     => $data['condition'],   // ✅ fixed typo still present
+            'condition'     => $data['condition'],
             'body_type'     => $data['body_type'],
             'gvw'           => $data['gvw'],
             'horse_type'    => $data['horse_power'],
             'prepared_by'   => $data['user_name'],
             'engine_series' => $data['engine'],
-            'company_id'    => $company->id,
-            'branch_id'     => $branch->id,
+            'company_id'    => $employee->company->id,
+            'branch_id'     => $employee->branch->id,
         ]);
 
         return redirect()->route('units.index');

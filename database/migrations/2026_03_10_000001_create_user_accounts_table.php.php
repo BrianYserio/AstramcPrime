@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_accounts', function (Blueprint $table) {
-            $table->id('row_id')->index()->unique();
+            $table->bigInteger('row_id')->unsigned();
 
             // Identity & Auth
-            $table->string('user_id')->unique();   // Your custom system ID
+            $table->string('user_id')->primary();   // Your custom system ID
             $table->string('username')->unique();
             $table->string('password');            // Ensure this is hashed in your Controller/Observer
             $table->string('api_token', 80)->unique()->nullable();

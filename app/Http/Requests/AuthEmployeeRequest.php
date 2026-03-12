@@ -53,7 +53,6 @@ class AuthEmployeeRequest extends FormRequest
             'sss_number'        => ['nullable', 'string'],
             'tin_number'        => ['nullable', 'string'],
 
-
         ];
     }
 }

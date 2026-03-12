@@ -206,7 +206,7 @@
                                     </x-forms.select-field>
                                 </div>
 
-                                {{-- Company (system-derived, not editable) --}}
+                            {{-- Company (system-derived, not editable) --}}
                             <div class="flex flex-col gap-4 sm:col-span-4">
                                 <label class="{{ $ui['label'] }}">Company</label>
                                 <x-forms.select-field name="company_id" class="{{ $ui['compact'] }}">

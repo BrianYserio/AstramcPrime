@@ -380,7 +380,7 @@
             ← Back
         </a>
 
-        <a href="{{ route('employees.edit', $employees->id) }}"
+        <a href="{{ route('employees.edit', $employees->employee_id) }}"
            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white
                   bg-blue-600 rounded-lg shadow-sm shadow-blue-200 transition
                   hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98]">

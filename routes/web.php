@@ -19,27 +19,14 @@ Route::get('dashboard', function() {
     return view('dashboard.modules.dashboard.index');
 })->name('dashboard');
 
-Route::controller(EmployeeController::class)
-    ->prefix('management/human-resource')
-    ->name('employees.')
-    ->group(function () {
-        Route::get('/',          'index')  ->name('index');
-        Route::get('/create',    'create') ->name('create');
-        Route::post('/',         'store')  ->name('store');
-        Route::get('/{id}',      'show')   ->name('show');
-        Route::get('/{id}/edit', 'edit')   ->name('edit');
-        Route::put('/{id}',      'update') ->name('update');
-    });
 
-Route::controller(UserAccountController::class)
-        ->prefix('administrator/user-accounts')
-        ->name('user-accounts.')
-        ->group(function() {
-Route::get('/',        'index')->name('index');
-Route::get('/create',  'create')->name('create');
-Route::post('/',       'store')->name('store');
-Route::get('/{id}',    'show')   ->name('show');
-});
+Route::resource('management/human-resource', EmployeeController::class)
+    ->only(['index', 'create', 'store', 'show', 'edit', 'update'])
+    ->names('employees');
+
+Route::resource('administrator/user-accounts', UserAccountController::class)
+    ->only(['index', 'create', 'store', 'show'])
+    ->names('user-accounts');
 
 Route::controller(SupplierController::class)
         ->prefix('purchasing/supplier')
@@ -51,20 +38,15 @@ Route::get('/create',  'create')->name('create');
 // Route::get('/{id}',    'show')   ->name('show');
 });
 
-
-
-// Route::patch('user-accounts/{id}/info',        [..., 'update.info']);
-// Route::patch('user-accounts/{id}/credentials', [..., 'update.credentials']);
-// Route::patch('user-accounts/{id}/permissions', [..., 'update.permissions']);
 // Protected routes
 Route::middleware(['auth'])->group(function () {
         Route::controller(UnitController::class)
             ->prefix('warehouse/units')
             ->name('units.')
             ->group(function() {
-    Route::get('/',        'index')->name('index');
-    Route::get('/create',  'create')->name('create');
-    Route::post('/',       'store')->name('store');
+        Route::get('/',        'index')->name('index');
+        Route::get('/create',  'create')->name('create');
+        Route::post('/',       'store')->name('store');
     // Route::get('/{id}',    'show')   ->name('show');
     });
 });

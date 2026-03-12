@@ -61,7 +61,7 @@
                 {{-- Section Divider --}}
                 <div class="flex items-center gap-3 px-6 pt-5 pb-2">
                     <span class="text-[0.68rem] font-bold uppercase tracking-widest text-gray-400">
-                        Unit Information
+                        Units
                     </span>
                     <span class="flex-1 h-px bg-orange-200" aria-hidden="true"></span>
                 </div>
@@ -190,8 +190,8 @@
                                 Prepared By
                                 {!! $autoBadge !!}
                             </label>
-                            <input type="text" name="user_name" value="{{ auth()->user()->name ?? '' }}" readonly
-                                   class="{{ $styles['readonly'] }} {{ $styles['compact'] }}" />
+                            <input type="text" name="user_name" value="{{ auth()->user()->name ?? '' }}"
+                                   class="{{ $styles['input'] }} {{ $styles['compact'] }}" />
                         </div>
 
                         {{-- Engine Series --}}
@@ -204,6 +204,11 @@
 
                     </div>{{-- /grid --}}
                 </div>{{-- /form fields --}}
+
+                {{-- Section Divider --}}
+                <div class="flex items-center gap-3 px-6 pt-2 pb-8">
+                    <span class="flex-1 h-px bg-orange-200" aria-hidden="true"></span>
+                </div>
 
             </div>{{-- /card --}}
 

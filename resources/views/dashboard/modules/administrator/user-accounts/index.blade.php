@@ -10,7 +10,7 @@
 
         <x-add-link href="{{ route('user-accounts.create') }}">
             <x-addIcon />
-            Employee
+            User account
         </x-add-link>
 
     </div>
@@ -68,7 +68,7 @@
                         <td class="px-4 py-3 text-xs text-gray-400 font-mono">$i + 1</td>
 
                         <td class="px-4 py-3 text-xs">
-                            <a href="{{route('user-accounts.show', $employee->id)}}"
+                            <a href="{{route('user-accounts.show', $employee->employee_id)}}"
                                class="text-blue-600 hover:text-blue-800 font-semibold font-mono hover:underline">
                                 {{ $employee->employee_id }}
                             </a>
@@ -103,7 +103,7 @@
                                     <span class="text-red-600">No</span>
                                 </td>
                             @endif
-                           
+
                     </tr>
                     @endforeach
                 </tbody>

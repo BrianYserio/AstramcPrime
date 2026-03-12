@@ -10,6 +10,8 @@ class EmployeePosition extends Model
 
     protected $table = "hr_employee_position";
 
+    protected $primaryKey = 'row_id';
+
     public function employees()
     {
         return $this->hasMany(Employee::class);

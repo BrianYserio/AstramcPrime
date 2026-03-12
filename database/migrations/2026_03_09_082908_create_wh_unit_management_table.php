@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Branch;
+use App\Models\Company;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,8 +14,8 @@ return new class extends Migration
     public function up(): void
     {
        Schema::create('wh_unit_management', function (Blueprint $table) {
-            $table->id('row_id');
-            $table->string('unit_id')->unique();
+            $table->bigInteger('row_id')->unsigned();
+            $table->string('unit_id')->primary();
             $table->string('body_type');
             $table->string('horse_type');
             $table->string('cabin_type');
@@ -28,14 +30,9 @@ return new class extends Migration
             $table->string('remarks')->nullable();;
             $table->string('prepared_by'); // employee id
 
-            $table->foreignId('company_id')->constrained(
-                table: 'astra_company',
-                column: 'row_id' // <--- THIS IS THE FIX
-            )->cascadeOnDelete();
-            $table->foreignId('branch_id')->constrained(
-                table: 'astra_branches',
-                column: 'row_id' // <--- THIS IS THE FIX
-            )->cascadeOnDelete();
+            $table->foreignIdFor(Company::class);
+
+            $table->foreignIdFor(Branch::class);
 
             $table->boolean('is_active')->default(true);
             $table->decimal('promo_price', 12, 2)->nullable();

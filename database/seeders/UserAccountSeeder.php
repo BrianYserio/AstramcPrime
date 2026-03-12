@@ -20,6 +20,7 @@ class UserAccountSeeder extends Seeder
         UserAccount::updateOrCreate(
             ['user_id' => 'EMP000000'], // search by user_id
             [
+                'row_id' => 1,
                 'user_id' => 'EMP000000',
                 'username'  => 'admin',
                 'password'  => bcrypt('11111111'),

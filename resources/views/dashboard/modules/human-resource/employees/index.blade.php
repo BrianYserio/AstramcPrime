@@ -68,7 +68,7 @@
                         <td class="px-4 py-3 text-xs text-gray-400 font-mono">$i + 1</td>
 
                         <td class="px-4 py-3 text-xs">
-                            <a href="{{ route('employees.show', $employee->id) }}"
+                            <a href="{{ route('employees.show', $employee->employee_id) }}"
                                class="text-blue-600 hover:text-blue-800 font-semibold font-mono hover:underline">
                                 {{ $employee->employee_id }}
                             </a>

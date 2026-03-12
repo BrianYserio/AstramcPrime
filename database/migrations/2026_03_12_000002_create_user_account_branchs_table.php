@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_account_branchs', function (Blueprint $table) {
-            $table->id('row_id')->index()->unique();
-            $table->foreignIdFor(UserAccount::class)->constrained()->cascadeOnDelete();
+            $table->bigInteger('row_id')->unsigned();
+            $table->string('id')->primary();
             $table->string('company');
             $table->string('branch');
             $table->softDeletes();

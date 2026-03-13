@@ -179,8 +179,8 @@
                                                 value="{{ $employee->employee_id }}"
                                                 data-employee-id="{{ $employee->employee_id }}"
                                                 data-status="{{ $employee->emp_status }}"
-                                                data-position="{{ $employee->position->position_description }}"
-                                                data-company="{{ $employee->company->company_name }}"
+                                                data-position="{{ $employee->position?->position_description }}"
+                                                data-company="{{ $employee->company?->company_name }}"
                                                 data-name="{{ $employee->first_name }} {{ $employee->last_name }}"
                                             >
                                                 {{ $employee->first_name }} {{ $employee->last_name }}
@@ -224,7 +224,7 @@
                                     <x-forms.select-field name="role" class="{{ $styles['compact'] }}">
                                         <option value="">Select Role</option>
                                         @foreach($user_roles as $role)
-                                            <option value="{{ $role->role_id }}">
+                                            <option value="{{ $role->row_id }}">
                                                 {{ $role->role_description }}
                                             </option>
                                         @endforeach
@@ -247,8 +247,9 @@
                                 </div>
 
                                 {{-- Branch --}}
+                                {{-- Branch --}}
                                 <div class="flex flex-col gap-1 sm:col-span-4">
-                                    <label class="{{ $styles['label'] }}">Branch</label>
+                                    <label class="{{ $styles['label'] }}" for="branch-select">Branch</label>
                                     <select
                                         id="branch-select"
                                         name="branch_ids[]"
@@ -257,9 +258,12 @@
                                         data-hs-select="{{ $hsSelectConfig }}"
                                     >
                                         <option value="">Select branch...</option>
-                                        @foreach($branches as $id => $branch)
-                                            <option value="{{ $id }}" @selected(in_array($id, old('branch_ids', [])))>
-                                                {{ $branch }}
+                                        @foreach($branches as $rowId => $branchName)
+                                            <option
+                                                value="{{ $rowId }}"
+                                                @selected(in_array((string) $rowId, old('branch_ids', [])))
+                                            >
+                                                {{ $branchName }}
                                             </option>
                                         @endforeach
                                     </select>

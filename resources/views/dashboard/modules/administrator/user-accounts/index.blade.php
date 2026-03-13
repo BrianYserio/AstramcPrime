@@ -61,11 +61,11 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-100" id="table-body">
-                    @foreach ($employees as $i => $employee)
+                    @foreach ($employees as $employee)
                     <tr class="hover:bg-gray-50 transition-colors duration-100 table-row"
                         data-status="{{-- strtolower($transmittal->status) --}}">
 
-                        <td class="px-4 py-3 text-xs text-gray-400 font-mono">$i + 1</td>
+                        <td class="px-4 py-3 text-xs text-gray-400 font-mono">{{$employee->row_id}}</td>
 
                         <td class="px-4 py-3 text-xs">
                             <a href="{{route('user-accounts.show', $employee->employee_id)}}"
@@ -79,7 +79,7 @@
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-700 font-medium">
-                            {{ $employee->first_name }} {{ $employee->last_name }}
+                            {{-- {{ $employee->userAccount->username }} --}}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
@@ -87,7 +87,7 @@
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{ $employee->UserRole?->role }}
+                            {{-- {{ $employee->UserRole->role_description }} --}}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">

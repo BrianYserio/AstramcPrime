@@ -11,7 +11,7 @@ class CreateUserAccountRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,11 +22,11 @@ class CreateUserAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_name'         => ['required', 'string'],
-            'role'         => ['required', 'string'],
-            'name'         => ['required', 'string'],
-            'password'         => ['required', 'string'],
-            'confirm_password'         => ['required', 'string', 'confirmed'],
+            'name'       => 'required|string|unique:user_accounts,username',
+            'password'   => 'required|string|min:8',
+            'role'       => 'required',
+            'branch_ids' => 'required|array',
+            'branch_ids.*' => 'exists:astra_branches,row_id',
         ];
     }
 }

@@ -2,9 +2,9 @@
 
 {{-- ═══════════════════════════════════════════════════════════════════════════
  |  Employee Profile — Read-Only View
- |  Route:   employees.show
+ |  Route:   employee.show
  |  Purpose: Display a single employee's full profile. No data is editable here.
- |           All mutation actions route to employees.edit.
+ |           All mutation actions route to employee.edit.
  ══════════════════════════════════════════════════════════════════════════════ --}}
 
 @php
@@ -36,7 +36,7 @@
 
     /**
      * Healthcare availment fields.
-     * Value keys map to $employees properties; label is the display string.
+     * Value keys map to $employee properties; label is the display string.
      */
     $healthcareFields = [
         ['label' => 'Dental',                    'key' => 'dental'],
@@ -107,7 +107,7 @@
                 </div>
             </div>
 
-            <x-badge.status color="yellow" label="{{ $employees->emp_status }}" class="ml-auto" />
+            <x-badge.status color="yellow" label="{{ $employee->emp_status }}" class="ml-auto" />
         </div>
 
         {{-- Section label --}}
@@ -134,14 +134,14 @@
                                 Employee ID
                                 <span class="{{ $ui['badge'] }} ml-1 text-[0.6rem] font-normal normal-case tracking-normal text-blue-400 bg-blue-50 px-1.5 py-0.5 rounded">Auto-generated</span>
                             </label>
-                            <input type="text" readonly value="{{ $employees->employee_id }}"
+                            <input type="text" readonly value="{{ $employee->employee_id }}"
                                    class="{{ $ui['field'] }}" aria-label="Employee ID" />
                         </div>
 
                         @foreach([
-                            'First Name'   => $employees->first_name,
-                            'Middle Name'  => $employees->middle_name,
-                            'Last Name'    => $employees->last_name,
+                            'First Name'   => $employee->first_name,
+                            'Middle Name'  => $employee->middle_name,
+                            'Last Name'    => $employee->last_name,
                         ] as $fieldLabel => $fieldValue)
                             <div>
                                 <label class="{{ $ui['label'] }}">{{ $fieldLabel }}</label>
@@ -153,15 +153,15 @@
                         {{-- Birthdate --}}
                         <div>
                             <label class="{{ $ui['label'] }}">Birthdate</label>
-                            <input type="date" readonly value="{{ $employees->birthdate }}"
+                            <input type="date" readonly value="{{ $employee->birthdate }}"
                                    class="{{ $ui['field'] }}" aria-label="Birthdate" />
                         </div>
 
                         {{-- Enum-style readonly selects — rendered as text to avoid dropdown UX --}}
                         @foreach([
-                            'Gender'       => $employees->gender,
-                            'Civil Status' => $employees->civil_status,
-                            'Citizenship'  => $employees->citizenship,
+                            'Gender'       => $employee->gender,
+                            'Civil Status' => $employee->civil_status,
+                            'Citizenship'  => $employee->citizenship,
                         ] as $enumLabel => $enumValue)
                             <div>
                                 <label class="{{ $ui['label'] }}">{{ $enumLabel }}</label>
@@ -173,20 +173,20 @@
                         {{-- Contact & Email --}}
                         <div>
                             <label class="{{ $ui['label'] }}">Contact No.</label>
-                            <input type="tel" readonly value="{{ $employees->contact_number }}"
+                            <input type="tel" readonly value="{{ $employee->contact_number }}"
                                    class="{{ $ui['field'] }}" aria-label="Contact Number" />
                         </div>
 
                         <div>
                             <label class="{{ $ui['label'] }}">Email</label>
-                            <input type="email" readonly value="{{ $employees->email }}"
+                            <input type="email" readonly value="{{ $employee->email }}"
                                    class="{{ $ui['field'] }}" aria-label="Email" />
                         </div>
 
                         {{-- Address spans 2 columns --}}
                         <div class="sm:col-span-2">
                             <label class="{{ $ui['label'] }}">Complete Address</label>
-                            <input type="text" readonly value="{{ $employees->address }}"
+                            <input type="text" readonly value="{{ $employee->address }}"
                                    class="{{ $ui['field'] }}" aria-label="Complete Address" />
                         </div>
 
@@ -196,13 +196,13 @@
                 {{-- Profile photo — display only --}}
                 <div class="w-full lg:w-48 flex-shrink-0">
                     <div class="border border-orange-200 rounded-lg p-3 flex flex-col items-center bg-gray-50">
-                        <img src="{{ $employees->profile_image
-                                        ? asset('storage/' . $employees->profile_image)
+                        <img src="{{ $employee->profile_image
+                                        ? asset('storage/' . $employee->profile_image)
                                         : asset('assets/img/avatar5.png') }}"
                              class="w-32 h-32 object-cover rounded mb-2"
-                             alt="{{ $employees->first_name }} profile photo" />
-                        <span class="{{ $ui['field'] }} text-gray-400 bg-gray-100 text-[0.6rem] mt-1">
-                            Read-only
+                             alt="{{ $employee->first_name }} profile photo" />
+                        <span class="{{ $ui['field'] }} text-gray-400 bg-gray-100 text-[0.6rem] mt-1 items-center">
+                            <p class="text-center">{{ $employee->first_name }} {{ $employee->last_name }}</p>
                         </span>
                     </div>
                 </div>
@@ -225,15 +225,15 @@
 
                 {{-- Scalar employment fields --}}
                 @foreach([
-                    'Date Hired'         => $employees->date_hired,
-                    'Company'            => $employees->company->company_name,
-                    'Designation'        => $employees->branch->branch_name,
-                    'Level'              => $employees->level,
-                    'Position'           => $employees->position->position_description,
-                    'Sub-Designation'    => $employees->sub_branch,
-                    'Status'             => $employees->emp_status,
-                    'Date Status'        => $employees->date_status,
-                    'Assigned Location'  => $employees->location->name,
+                    'Date Hired'         => $employee->date_hired,
+                    'Company'            => $employee->company->company_name,
+                    'Designation'        => $employee->branch->branch_name,
+                    'Level'              => $employee->level,
+                    'Position'           => $employee->position->position_description,
+                    'Sub-Designation'    => $employee->sub_branch,
+                    'Status'             => $employee->emp_status,
+                    'Date Status'        => $employee->date_status,
+                    'Assigned Location'  => $employee->location->name,
                 ] as $empLabel => $empValue)
                     <div>
                         <label class="{{ $ui['label'] }}">{{ $empLabel }}</label>
@@ -252,7 +252,7 @@
                                     {{ $leave['label'] }}
                                 </label>
                                 <input id="leave_{{ $key }}" type="number" readonly
-                                       value="{{ $employees->{'leave_' . $key} ?? 0 }}"
+                                       value="{{ $employee->{'leave_' . $key} ?? 0 }}"
                                        class="w-full px-2 py-1 text-xs border rounded bg-gray-100
                                               border-orange-200 text-gray-500 cursor-not-allowed"
                                        aria-label="{{ $leave['label'] }} leave credits" />
@@ -287,7 +287,7 @@
                     <div>
                         <label class="{{ $ui['label'] }}">{{ $hf['label'] }}</label>
                         <input type="text" readonly
-                               value="{{ number_format($employees->{$hf['key']} ?? 0, 2) }}"
+                               value="{{ number_format($employee->{$hf['key']} ?? 0, 2) }}"
                                class="{{ $ui['field'] }}"
                                aria-label="{{ $hf['label'] }}" />
                         @isset($hf['note'])
@@ -318,7 +318,7 @@
                     <div>
                         <label class="{{ $ui['label'] }}">{{ $id['label'] }}</label>
                         <input type="text" readonly
-                               value="{{ $employees->{$id['key']} ?? '—' }}"
+                               value="{{ $employee->{$id['key']} ?? '—' }}"
                                class="{{ $ui['field'] }}"
                                aria-label="{{ $id['label'] }} number" />
                     </div>
@@ -354,12 +354,12 @@
 
                     <tbody class="border border-gray-200">
                         <tr class="odd:bg-blue-50">
-                            <td class="p-4 text-xs text-slate-600 font-medium">In 08:00 | 06:00 Out</td>
-                            <td class="p-4 text-xs text-slate-600 font-medium">In 08:00 | 06:00 Out</td>
-                            <td class="p-4 text-xs text-slate-600 font-medium">In 08:00 | 06:00 Out</td>
-                            <td class="p-4 text-xs text-slate-600 font-medium">In 08:00 | 06:00 Out</td>
-                            <td class="p-4 text-xs text-slate-600 font-medium">In 08:00 | 06:00 Out</td>
-                            <td class="p-4 text-xs text-slate-600 font-medium">In 08:00 | 06:00 Out</td>
+                            <td class="p-4 text-xs text-slate-600 font-medium">{{ $employee->employeeSchedule?->monday_in ?? 'N/A' }} | {{ $employee->employeeSchedule?->monday_out ?? 'N/A'}} </td>
+                            <td class="p-4 text-xs text-slate-600 font-medium">{{ $employee->employeeSchedule?->tuesday_in ?? 'N/A' }} | {{ $employee->employeeSchedule?->tuesday_out ?? 'N/A' }}</td>
+                            <td class="p-4 text-xs text-slate-600 font-medium">{{ $employee->employeeSchedule?->wednesday_in ?? 'N/A' }} | {{ $employee->employeeSchedule?->wednesday_out ?? 'N/A' }}</td>
+                            <td class="p-4 text-xs text-slate-600 font-medium">{{ $employee->employeeSchedule?->thursday_in ?? 'N/A' }} | {{ $employee->employeeSchedule?->tuesday_out ?? 'N/A' }}</td>
+                            <td class="p-4 text-xs text-slate-600 font-medium">{{ $employee->employeeSchedule?->friday_in ?? 'N/A' }} | {{ $employee->employeeSchedule?->friday_out ?? 'N/A' }}</td>
+                            <td class="p-4 text-xs text-slate-600 font-medium">{{ $employee->employeeSchedule?->saturday_in ?? 'N/A' }} | {{ $employee->employeeSchedule?->saturday_out ?? 'N/A' }}</td>
                         </tr>
                     </tbody>
 
@@ -380,7 +380,7 @@
             ← Back
         </a>
 
-        <a href="{{ route('employees.edit', $employees->employee_id) }}"
+        <a href="{{ route('employees.edit', $employee->row_id) }}"
            class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white
                   bg-blue-600 rounded-lg shadow-sm shadow-blue-200 transition
                   hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98]">

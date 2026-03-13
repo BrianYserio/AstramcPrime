@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UserRole extends Model
 {
+
+    protected $primaryKey = 'row_id';
+
     protected $guarded = [];
 
     protected $table ="user_roles";

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Branch;
+use App\Models\Company;
 use App\Models\Users\UserAccount;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,12 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_account_branchs', function (Blueprint $table) {
-            $table->bigInteger('row_id')->unsigned();
-            $table->string('id')->primary();
-            $table->string('company');
-            $table->string('branch');
-            $table->softDeletes();
+        Schema::create('user_account_branch', function (Blueprint $table) {
+            $table->id('row_id');
+            $table->foreignIdFor(UserAccount::class, 'user_id');
+            $table->foreignIdFor(Company::class, 'company_id');
+            $table->foreignIdFor(Branch::class, 'branch_id');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_account_branchs');
+        Schema::dropIfExists('user_account_branch');
     }
 };

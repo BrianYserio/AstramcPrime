@@ -7,7 +7,6 @@ use App\Http\Requests\AuthEmployeeRequest;
 use App\Http\Services\EmployeeCredentials;
 use App\Http\Services\EmployeeIdGenerator;
 use App\Models\human_resource\Employee;
-use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -45,7 +44,8 @@ class EmployeeController extends Controller
         $data = $request->validated();
         $employeeIdPreview = EmployeeIdGenerator::generate();
 
-        $employees = Employee::with( [
+        // ✅ Use create(), not with()
+        $employee = Employee::create([
             // Personal Background
             'employee_id'    => $employeeIdPreview,
             'first_name'     => $data['firstName'],
@@ -59,15 +59,15 @@ class EmployeeController extends Controller
             'email'          => $data['email'],
             'address'        => $data['address'],
             'profile_image'  => $this->uploadProfileImage($request),
-            'employee_position_row_id' => $data['position'],
+            'position_id'    => $data['position'],
 
             // Employment Details
             'date_hired'        => $data['date_hired'],
             'date_status'       => $data['date_status'],
-            'company_company_id'   => $data['company'],
+            'company_id'        => $data['company'],
             'level'             => $data['level'],
             'emp_status'        => $data['emp_status'],
-            'branch_branch_id'            => $data['designation'],
+            'branch_id'         => $data['designation'],
             'sub_branch'        => $data['sub_branch'],
             'assigned_location' => $data['assigned_location'],
 
@@ -78,7 +78,8 @@ class EmployeeController extends Controller
             'tin'        => $data['tin_number']        ?? null,
         ]);
 
-        $employees->employeeSchedule()->create(
+       // Laravel auto-fills employee_id from the relationship
+        $employee->employeeSchedule()->create(
             $this->buildSchedulePayload(
                 $request->input('work_days', []),
                 $request->input('time_in',   []),
@@ -88,7 +89,24 @@ class EmployeeController extends Controller
 
         return redirect()
             ->route('employees.index')
-            ->with('success', "Employee {$data['employee_id']} created successfully!");
+            ->with('success', "Employee {$employeeIdPreview} created successfully!"); // ✅ was $data['employee_id'] which doesn't exist
+    }
+
+
+    private function buildSchedulePayload(array $days, array $timeIn, array $timeOut): array
+    {
+        $schedule = [];
+
+        $weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+        foreach ($weekdays as $day) {
+            $isActive = in_array($day, $days);
+
+            $schedule["{$day}_in"]  = $isActive ? ($timeIn[$day]  ?? null) : null;
+            $schedule["{$day}_out"] = $isActive ? ($timeOut[$day] ?? null) : null;
+        }
+
+        return $schedule;
     }
 
     /**
@@ -97,9 +115,13 @@ class EmployeeController extends Controller
     public function show(EmployeeCredentials $service, string $id)
     {
         $credentials = $service->getCredentials();
-        $employees = Employee::findOrFail($id);
+
+        $employee = Employee::with('employeeSchedule')
+        ->where('employee_id', $id)  // ✅ search by employee_id string
+        ->firstOrFail();
+
         return view('dashboard.modules.human-resource.employees.show', [
-            'employees' => $employees,
+            'employee' => $employee,
             'credentials' => $credentials
         ]);
     }
@@ -110,53 +132,34 @@ class EmployeeController extends Controller
     public function edit(EmployeeCredentials $service, string $id)
     {
         $credentials = $service->getCredentials();
-        $employees = Employee::findOrFail($id);
+        $employee = Employee::with('employeeSchedule')->findOrFail($id);
+        $schedule = $employee->employeeSchedule;
+
+        // ✅ Build selectedDays from schedule (days that have a time_in value)
+        $weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        $selectedDays = $schedule
+            ? collect($weekdays)->filter(fn($day) => !empty($schedule->{$day . '_in'}))->values()->toArray()
+            : [];
+
         return view('dashboard.modules.human-resource.employees.edit', [
-            'employees' => $employees,
-            'credentials' => $credentials
+            'employee' => $employee,
+            'credentials' => $credentials,
+            'schedule' => $schedule,
+            'selectedDays' => $selectedDays,
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(AuthEmployeeRequest $request)
+
+    public function update(AuthEmployeeRequest $request, string $id)
     {
         $data = $request->validated();
 
-        $days     = $request->input('work_days', []);
-        $timeIn   = $request->input('time_in', []);
-        $timeOut  = $request->input('time_out', []);
+        $employee = Employee::findOrFail($id);
 
-        DB::table('hr_employee_schedules')->updateOrInsert(
-            [
-                'monday_in'  => in_array('monday', $days) ? ($timeIn['monday'] ?? null) : null,
-                'monday_out' => in_array('monday', $days) ? ($timeOut['monday'] ?? null) : null,
-
-                'tuesday_in'  => in_array('tuesday', $days) ? ($timeIn['tuesday'] ?? null) : null,
-                'tuesday_out' => in_array('tuesday', $days) ? ($timeOut['tuesday'] ?? null) : null,
-
-                'wednesday_in'  => in_array('wednesday', $days) ? ($timeIn['wednesday'] ?? null) : null,
-                'wednesday_out' => in_array('wednesday', $days) ? ($timeOut['wednesday'] ?? null) : null,
-
-                'thursday_in'  => in_array('thursday', $days) ? ($timeIn['thursday'] ?? null) : null,
-                'thursday_out' => in_array('thursday', $days) ? ($timeOut['thursday'] ?? null) : null,
-
-                'friday_in'  => in_array('friday', $days) ? ($timeIn['friday'] ?? null) : null,
-                'friday_out' => in_array('friday', $days) ? ($timeOut['friday'] ?? null) : null,
-
-                'saturday_in'  => in_array('saturday', $days) ? ($timeIn['saturday'] ?? null) : null,
-                'saturday_out' => in_array('saturday', $days) ? ($timeOut['saturday'] ?? null) : null,
-
-                'updated_at' => now(),
-                'created_at' => now(),
-            ],
-        );
-
-        Employee::update([
+        $employee->update([
             // Personal Background
             'first_name'     => $data['firstName'],
-            'middle_name'    => $data['middleName'] ?? null,
+            'middle_name'    => $data['middleName']    ?? null,
             'last_name'      => $data['lastName'],
             'birthdate'      => $data['birthdate'],
             'gender'         => $data['gender'],
@@ -166,39 +169,39 @@ class EmployeeController extends Controller
             'email'          => $data['email'],
             'address'        => $data['address'],
             'profile_image'  => $this->uploadProfileImage($request),
+            'position_id'    => $data['position'],
 
             // Employment Details
             'date_hired'        => $data['date_hired'],
             'date_status'       => $data['date_status'],
-            'company'           => $data['company'],
+            'company_id'        => $data['company'],
             'level'             => $data['level'],
             'emp_status'        => $data['emp_status'],
-            'branch'            => $data['designation'],
+            'branch_id'         => $data['designation'],
             'sub_branch'        => $data['sub_branch'],
-            'position'          => $data['position'],
             'assigned_location' => $data['assigned_location'],
 
             // Government Identification
-            'pagibig'     => $data['pagibig_number'] ?? null,
-            'philhealth'  => $data['philhealth_number'] ?? null,
-            'sss'         => $data['sss_number'] ?? null,
-            'tin'         => $data['tin_number'] ?? null,
+            'pagibig'    => $data['pagibig_number']    ?? null,
+            'philhealth' => $data['philhealth_number'] ?? null,
+            'sss'        => $data['sss_number']        ?? null,
+            'tin'        => $data['tin_number']        ?? null,
         ]);
 
-        return redirect()
-            ->route('employees.show')
-            ->with('success', "Employee {$data['employee_id']} created successfully!");
+        $employee->employeeSchedule()->updateOrCreate(
+            [],
+            $this->updateSchedulePayload(
+                $request->input('work_days', []),
+                $request->input('time_in',   []),
+                $request->input('time_out',  []),
+            )
+        );
+
+        return redirect()->route('employees.index')
+            ->with('success', 'Employee updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-    private function buildSchedulePayload(array $days, array $timeIn, array $timeOut): array
+    private function updateSchedulePayload(array $days, array $timeIn, array $timeOut): array
     {
         $schedule = [];
 

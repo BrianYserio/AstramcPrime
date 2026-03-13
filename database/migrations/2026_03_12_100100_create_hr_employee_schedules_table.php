@@ -13,7 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hr_employee_schedules', function (Blueprint $table) {
-            $table->id();
+            $table->id('row_id');
+            $table->foreignIdFor(Employee::class, 'employee_id');
             $table->time('monday_in')->nullable();
             $table->time('monday_out')->nullable();
             $table->time('tuesday_in')->nullable();

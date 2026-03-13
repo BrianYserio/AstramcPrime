@@ -3,7 +3,6 @@
 use App\Models\Branch;
 use App\Models\Company;
 use App\Models\human_resource\EmployeePosition;
-use App\Models\Users\UserAccount;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,8 +15,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hr_employees', function (Blueprint $table) {
-            $table->bigInteger('row_id')->unsigned();
-            $table->string('employee_id')->primary()->unique();
+            $table->id('row_id');
+            $table->string('employee_id');
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
@@ -32,9 +31,9 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('profile_image')->nullable();
 
-            $table->foreignIdFor(EmployeePosition::class);
-            $table->foreignIdFor(Company::class);
-            $table->foreignIdFor(Branch::class);
+            $table->foreignIdFor(EmployeePosition::class, 'position_id');
+            $table->foreignIdFor(Company::class, 'company_id');
+            $table->foreignIdFor(Branch::class, 'branch_id');
 
             $table->date('date_hired')->nullable();
             $table->date('date_status')->nullable();

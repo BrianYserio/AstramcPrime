@@ -14,7 +14,7 @@ class Branch extends Model
 
     protected $table = "astra_branches";
 
-    protected $primaryKey = 'branch_id';
+    protected $primaryKey = 'row_id';
 
     public function units(): HasMany
     {

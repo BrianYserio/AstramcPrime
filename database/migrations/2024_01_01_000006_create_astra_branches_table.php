@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('astra_branches', function (Blueprint $table) {
-            $table->bigInteger('row_id')->unsigned();
-            $table->string('branch_id')->primary();
+            $table->id('row_id');
+            $table->string('branch_id')->unique();
             $table->string('branch_name');
             $table->boolean('is_active')->default(true);
             $table->enum('bytype', ['Department', 'Branch', 'Sub-department'])->default('Department');

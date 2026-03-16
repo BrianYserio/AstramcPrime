@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Administrator;
 
+use App\Action\Administrator\UserStoreAction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\CreateUserAccountRequest;
+use App\Http\Requests\Users\UserStoreRequest;
 use App\Models\Branch;
 use App\Models\Company;
 use App\Models\human_resource\Employee;
 use App\Models\Users\UserAccount;
 use App\Models\Users\UserRole;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserAccountController extends Controller
 {
@@ -19,7 +21,15 @@ class UserAccountController extends Controller
      */
     public function index()
     {
-        $employees = Employee::with(['userAccount', 'UserRole'])->get();
+        $employees = Employee::query()->select([
+            'row_id',
+            'employee_id',
+            'first_name',
+            'last_name',
+            'position_id',
+            'is_active',
+            'created_at',
+        ])->get();
 
         return view('dashboard.modules.administrator.user-accounts.index',
         [
@@ -32,7 +42,7 @@ class UserAccountController extends Controller
      */
     public function create()
     {
-        $employees = Employee::select(
+        $employees = Employee::query()->select(
             'employee_id',
             'first_name',
             'last_name',
@@ -42,14 +52,14 @@ class UserAccountController extends Controller
         )->with([
                 'position:row_id,position_description',
                 'company:row_id,company_name',
-            ])->get();
+        ])->get();
 
-        $user_roles = UserRole::select(
+        $user_roles = UserRole::query()->select(
             'row_id',
             'role_description'
         )->get();
 
-        $branches = Branch::where('is_active', 1)
+        $branches = Branch::query()->where('is_active', 1)
         ->pluck('branch_name', 'row_id');
 
         return view('dashboard.modules.administrator.user-accounts.create',
@@ -65,33 +75,30 @@ class UserAccountController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-                'role'        => 'required',
-                'company'     => 'nullable',
-                'employee_id' => 'nullable',
-                'position'    => 'nullable',
-                'branch_ids'  => 'required|array',
-                'name'        => 'required|string|unique:user_accounts,username',
-                'password'    => 'required|string|min:8',
-            ]);
-        $user = UserAccount::create([
-            'user_id' => $request->input('employee_name'),
-            'role_id'     => $request->input('role'),
-            'username' => $request->input('name'),
-            'password' => bcrypt($request->input('password')),
+        $validated = $request->validate([
+            'name'       => ['required', 'string', 'max:255'],
+            'password'   => ['required', 'string', 'min:8'],
+            'company'    => ['required', 'string', 'max:255'],
+            'branch_ids' => ['array'],
         ]);
 
-        if (!empty($request->branch_ids)) {
-            $user->userBranch()->attach($request->input('branch_ids'));
-        }
+        $employee = Employee::findOrFail($request->row_id);
 
-        $user->userRoles()->attach($request->input('role_id'));
+        DB::transaction(function () use ($validated) {
+            $user = UserAccount::create([
+                'user_id'  => $employee->employee_id,
+                'username' => $validated['name'],
+                'password' => Hash::make($validated['password']),
+            ]);
 
-        $users = UserAccount::with('branch', 'userRoles')->get();
+            $user->userBranch()->create([
+                'company' => $validated['company'],
+                'branch'  => $validated['branch_ids'],
+            ]);
+        });
 
-        return view('dashboard.modules.administrator.user-accounts.index', compact('users'));
-
-        // dd($request->all());
+        return redirect()->route('administrator.user-accounts.index')
+            ->with('success', 'User account created successfully.');
     }
 
     /**
@@ -99,22 +106,21 @@ class UserAccountController extends Controller
      */
     public function show(string $id)
     {
-        $user_roles = DB::table('user_roles')
-                ->select('role_id','role_description')
-                ->get();
+        // $user_roles = UserRole::select('role_id','role_description')
+        //         ->get();
 
-        $branches = Branch::where('is_active', 1)
-        ->pluck('branch_name', 'branch_id');
-        // [id => name]
+        // $branches = Branch::where('is_active', 1)
+        // ->pluck('branch_name', 'branch_id');
+        // // [id => name]
 
-        $employees = Employee::with('company')->findOrFail($id);
-        $companies = Company::select('company_id','company_name')->get();
-        return view('dashboard.modules.administrator.user-accounts.show', [
-            'employees' => $employees,
-            'user_roles' => $user_roles,
-            'branches' => $branches,
-            'companies' => $companies
-        ]);
+        // $employees = Employee::with('company')->findOrFail($id);
+        // $companies = Company::select('company_id','company_name')->get();
+        // return view('dashboard.modules.administrator.user-accounts.show', [
+        //     'employees' => $employees,
+        //     'user_roles' => $user_roles,
+        //     'branches' => $branches,
+        //     'companies' => $companies
+        // ]);
     }
 
     /**
@@ -128,11 +134,10 @@ class UserAccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update()
     {
-        //
-    }
 
+    }
     /**
      * Remove the specified resource from storage.
      */

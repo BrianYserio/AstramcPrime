@@ -112,6 +112,7 @@
             document.getElementById("employeePass").value = "";
         }
     }
+
     </script>
 
     <form action="{{ route('user-accounts.store') }}" method="POST" enctype="multipart/form-data">
@@ -388,7 +389,7 @@
                         class="inline-flex items-center gap-2 px-7 py-2.5 text-sm font-semibold text-white
                                bg-blue-600 rounded-lg shadow-sm shadow-blue-200 transition
                                hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98]">
-                    Save User Account
+                    Save
                 </button>
             </div>
         </div>{{-- /space-y-4 --}}

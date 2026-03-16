@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\human_resource\Employee;
+use App\Models\Users\UserAccount;
 use App\Models\Warehouse\UnitManagement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,11 @@ class Branch extends Model
     public function employees()
     {
         return $this->hasMany(Employee::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(UserAccount::class, 'user_account_branch',' company_id', 'branch_id' );
     }
 
     public function company()

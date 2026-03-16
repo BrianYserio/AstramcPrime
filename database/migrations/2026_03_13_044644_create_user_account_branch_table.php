@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Branch;
-use App\Models\Company;
 use App\Models\Users\UserAccount;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,9 +15,13 @@ return new class extends Migration
     {
         Schema::create('user_account_branch', function (Blueprint $table) {
             $table->id('row_id');
-            $table->foreignIdFor(UserAccount::class, 'user_id');
-            $table->foreignIdFor(Company::class, 'company_id');
-            $table->foreignIdFor(Branch::class, 'branch_id');
+            // Foreign Key for the User
+            $table->string('id');
+
+            $table->string('company')->unique();
+            // Foreign Key for the Branch
+            $table->string('branch');
+
             $table->timestamps();
         });
     }

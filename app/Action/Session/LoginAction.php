@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Action;
+namespace App\Action\Session;
 
 use Illuminate\Support\Facades\Auth;
 
 class LoginAction
 {
-    public function execute(array $credentials) {
-        if(Auth::attempt($credentials)) {
+    public function execute(array $credentials)
+    {
+        if (Auth::attempt($credentials)) {
             session()->regenerate();
             return true;
         }

@@ -22,11 +22,11 @@ class Employee extends Model
     protected $guarded = [];
 
     public function userAccount()
-    {                                 //employee foreignkey // user_accounts primary key
-        return $this->belongsTo(UserAccount::class, 'user_id', 'row_id');
+    {                                 //foreign_key_on_users // user_accounts primary key
+        return $this->hasOne(UserAccount::class, 'employee_id', 'row_id');
     }
     public function employeeSchedule()
-    {                                          //employee foreignkey // schedule primary key
+    {                                        //employee foreignkey // schedule primary key
         return $this->hasOne(EmployeeSchedule::class, 'employee_id', 'row_id');
     }
 
@@ -50,9 +50,9 @@ class Employee extends Model
         return $this->belongsTo(AssignedLocation::class, 'assigned_location', 'row_id');
     }
 
-    public function UserRole()
-    {                                                 //employee foreignkey // location primary key
-        return $this->belongsTo(UserRole::class, 'role_id', 'row_id');
-    }
+    // public function UserRole()
+    // {                                                 //employee foreignkey // location primary key
+    //     return $this->belongsTo(UserRole::class, 'role_id', 'row_id');
+    // }
 
 }

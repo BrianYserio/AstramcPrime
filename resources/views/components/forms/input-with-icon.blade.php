@@ -25,11 +25,11 @@
             {{ $icon }}
         @endif
 
-         {{-- 🔴 Reusable Error Message --}}
+    </div>
+     {{-- 🔴 Reusable Error Message --}}
         @error($name)
             <p class="mt-1 text-sm text-red-600">
                 {{ $message }}
             </p>
         @enderror
-    </div>
 </div>

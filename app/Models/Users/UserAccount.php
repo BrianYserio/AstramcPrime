@@ -7,7 +7,9 @@ use App\Models\Company;
 use App\Models\human_resource\Employee;
 use App\Models\Users\UserAccountBranch;
 use App\Models\Users\UserRole;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,11 +19,13 @@ use Illuminate\Support\Str;
 class UserAccount extends Authenticatable
 {
 
-    use Notifiable;
+    use Notifiable, HasFactory;
+
+    // public $incrementing = false;
 
     protected $table = 'user_accounts';
 
-    protected $primaryKey = 'user_id'; // Since you used row_id
+    protected $primaryKey = 'row_id'; // Since you used row_id
 
     protected $guarded= [];
 
@@ -34,24 +38,24 @@ class UserAccount extends Authenticatable
         'api_token',
     ];
 
-    public function employee(): HasOne
+    public function employee()
     {
-        return $this->hasOne(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id', 'row_id');
     }
 
-    public function userRoles()
-    {
-        return $this->belongsToMany(UserRole::class, 'user_id','role_id', 'row_id');
-    }
+    // public function userRoles()
+    // {
+    //     return $this->belongsToMany(UserRole::class, 'user_id','role_id', 'row_id');
+    // }
 
     public function role(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
     }
 
-    public function branches(): HasMany
+    public function branches(): belongsToMany
     {
-        return $this->hasMany(Branch::class, 'branch_id', 'row_id');
+        return $this->belongsToMany(Branch::class, 'branch_id', 'row_id');
     }
 
     public function company(): HasOne
@@ -59,14 +63,14 @@ class UserAccount extends Authenticatable
         return $this->hasOne(Company::class);
     }
 
-    public function findForPassport($username)
-    {
-        return $this->where('username', $username)->first();
-    }
+    // public function findForPassport($username)
+    // {
+    //     return $this->where('username', $username)->first();
+    // }
 
-    public function userBranch(): HasMany
+    public function userAccountBranch(): BelongsToMany
     {
-        return $this->hasMany(UserAccountBranch::class, 'company_id','branch_id', 'row_id');
+        return $this->belongsToMany(UserAccountBranch::class, 'user_id','branch_id', 'row_id');
     }
 
     protected static function boot()

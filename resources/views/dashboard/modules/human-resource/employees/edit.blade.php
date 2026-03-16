@@ -549,18 +549,11 @@
             {{-- ── Footer Actions ─────────────────────────────────────────────────── --}}
             <div class="flex items-center justify-end gap-3 pt-1 pb-4">
 
-                <a href="{{ route('employees.index') }}"
-                class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-gray-600
-                        bg-white border border-gray-200 rounded-lg shadow-sm transition
-                        hover:bg-gray-50 active:scale-[0.98]">
-                    ← Back
-                </a>
-
                 <button type="submit"
                 class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white
                         bg-blue-600 rounded-lg shadow-sm shadow-blue-200 transition
                         hover:bg-blue-700 hover:shadow-blue-300 active:scale-[0.98]">
-                    ✎ Update Employee
+                    ✎ Update
                 </button>
 
             </div>

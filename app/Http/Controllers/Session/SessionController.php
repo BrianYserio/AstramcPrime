@@ -1,30 +1,33 @@
 <?php
 
-namespace App\Http\Controllers\Users;
+namespace App\Http\Controllers\Session;
 
-use App\Action\LoginAction;
+use App\Action\Session\LoginAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class AuthenticatedSessionController extends Controller
+class SessionController extends Controller
 {
     public function create() {
         return view('auth.login');
     }
 
     public function store(
-        LoginAction $Action,
+        LoginAction $action,
         LoginRequest $request
     ): RedirectResponse {
 
         $validated = $request->validated();
-        if($Action->execute($validated)) {
+        if($action->execute($validated)) {
             return redirect()->route('dashboard');
         }
         return back()->withErrors([
-            'username' => 'invalid credentials.',
-            'password' => 'incorrect password.'
+            'username' => 'The provided credentials do not match our records.',
         ]);
+    }
+
+    public function destroy() {
+
     }
 }

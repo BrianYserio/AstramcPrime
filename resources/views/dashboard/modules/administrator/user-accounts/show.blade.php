@@ -134,7 +134,7 @@
                     </div>
 
                     <x-badge.status color="yellow"
-                                    label="{{ $employees->emp_status }}"
+                                    label="{{ $employee->emp_status }}"
                                     class="ml-auto" />
                 </div>
 
@@ -159,7 +159,7 @@
                                     <label class="{{ $ui['label'] }}">Employee name</label>
                                     <input type="text"
                                            name="employee_name"
-                                           value="{{ $employees->first_name }} {{ $employees->last_name }}"
+                                           value="{{ $employee->first_name }} {{ $employee->last_name }}"
                                            x-bind:disabled="!editing"
                                            :class="editing ? '' : 'bg-gray-50 text-gray-400 cursor-not-allowed'"
                                            class="{{ $ui['readonly'] }} {{ $ui['compact'] }}" />
@@ -176,7 +176,7 @@
                                     </label>
                                     <input type="text"
                                            name="employee_id"
-                                           value="{{ $employees->employee_id }}"
+                                           value="{{ $employee->employee_id }}"
                                            readonly
                                            class="{{ $ui['readonly'] }} {{ $ui['compact'] }}" />
                                 </div>
@@ -186,7 +186,7 @@
                                     <label class="{{ $ui['label'] }}">Position</label>
                                     <input type="text"
                                            name="position"
-                                           value="{{ $employees->position->position_description }}"
+                                           value="{{ $employee->position->position_description }}"
                                            x-bind:disabled="!editing"
                                            :class="editing ? '' : 'bg-gray-50 text-gray-400 cursor-not-allowed'"
                                            class="{{ $ui['readonly'] }} {{ $ui['compact'] }}" />
@@ -197,7 +197,7 @@
                                     <label class="{{ $ui['label'] }}">Role</label>
                                     <x-forms.select-field name="role" class="{{ $ui['compact'] }}">
                                         <option value="">Select Role</option>
-                                        @foreach ($user_roles as $role)
+                                        @foreach ($userRole as $role)
                                             <option value="{{ $role->role_id }}"
                                                     @selected(old('role') == $role->role_id)>
                                                 {{ $role->role_description }}
@@ -212,9 +212,9 @@
                                 <x-forms.select-field name="company_id" class="{{ $ui['compact'] }}">
                                     <option value="">Select Company</option>
 
-                                    @foreach ($companies as $company)
+                                     @foreach ($companies as $company)
                                         <option value="{{ $company->company_id }}"
-                                            @selected(old('company_id', $employees->company_id) == $company->company_id)>
+                                            @selected(old('company_id', $employee->company_id) == $company->company_id)>
                                             {{ $company->company_name }}
                                         </option>
                                     @endforeach
@@ -231,10 +231,10 @@
                                             class="hidden"
                                             data-hs-select='{{ $hsSelectConfig }}'>
                                         <option value="">Select branch...</option>
-                                        @foreach ($branches as $branchId => $branchName)
-                                            <option value="{{ $branchId }}"
-                                                    @selected(in_array($branchId, old('branch_ids', [])))>
-                                                {{ $branchName }}
+                                        @foreach ($branches as $branch)
+                                            <option value="{{ $branch->row_id }}"
+                                                    @selected(in_array($branch->row_id, old('branch_ids', [])))>
+                                                {{ $branch->branch_name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -249,8 +249,8 @@
 
                                 <div class="w-32 h-32 mb-4 rounded overflow-hidden bg-gray-100">
                                     <img id="profile-preview"
-                                         src="{{ $employees->profile_image
-                                                    ? asset('storage/' . $employees->profile_image)
+                                         src="{{ $employee->profile_image
+                                                    ? asset('storage/' . $employee->profile_image)
                                                     : '' }}"
                                          alt="Employee signature preview"
                                          class="opacity-80 w-full h-full object-cover" />
@@ -317,7 +317,7 @@
                             <label class="{{ $ui['label'] }}">Username</label>
                             <input type="text"
                                    name="username"
-                                   value="{{ old('username', $employees->username) }}"
+                                   value="{{ old('username', $employee->username) }}"
                                    x-bind:disabled="!editing"
                                    :class="editing ? '' : 'bg-gray-50 text-gray-400 cursor-not-allowed'"
                                    class="{{ $ui['input'] }} {{ $ui['compact'] }}" />

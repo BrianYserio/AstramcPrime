@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Action\Administrator\UserStoreAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\UserStoreRequest;
 use App\Models\Branch;
@@ -10,9 +9,9 @@ use App\Models\Company;
 use App\Models\human_resource\Employee;
 use App\Models\Users\UserAccount;
 use App\Models\Users\UserRole;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserAccountController extends Controller
 {
@@ -73,31 +72,27 @@ class UserAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name'       => ['required', 'string', 'max:255'],
-            'password'   => ['required', 'string', 'min:8'],
-            'company'    => ['required', 'string', 'max:255'],
-            'branch_ids' => ['array'],
+        $validated = $request->validated();
+
+        $user = UserAccount::create([
+            'user_id'     => Auth::id(),
+            'username'    => $validated['name'],
+            'password'    => Hash::make($validated['password']),
+            'role_id'     => $validated['role'],
+            'prepared_by' => Auth::user()->row_id,
         ]);
 
-        $employee = Employee::findOrFail($request->row_id);
+        $user->userAccountBranch()->create([
+            'id'      => $user->row_id,        // Linking the foreign key
+            'company' => $validated['company'],
+            'branch'  => $validated['branch_ids'], // Pass the array directly!
+        ]);
 
-        DB::transaction(function () use ($validated) {
-            $user = UserAccount::create([
-                'user_id'  => $employee->employee_id,
-                'username' => $validated['name'],
-                'password' => Hash::make($validated['password']),
-            ]);
+        // $user->userAccountBranch()->createMany($branches->all());
 
-            $user->userBranch()->create([
-                'company' => $validated['company'],
-                'branch'  => $validated['branch_ids'],
-            ]);
-        });
-
-        return redirect()->route('administrator.user-accounts.index')
+        return redirect()->route('user-accounts.index')
             ->with('success', 'User account created successfully.');
     }
 
@@ -106,21 +101,14 @@ class UserAccountController extends Controller
      */
     public function show(string $id)
     {
-        // $user_roles = UserRole::select('role_id','role_description')
-        //         ->get();
+        $employee = Employee::with('company')->where('employee_id', $id)->firstOrFail();
+        $companies = Company::all();
 
-        // $branches = Branch::where('is_active', 1)
-        // ->pluck('branch_name', 'branch_id');
-        // // [id => name]
+        $userRole = UserRole::all();
+        $branches = Branch::all();
 
-        // $employees = Employee::with('company')->findOrFail($id);
-        // $companies = Company::select('company_id','company_name')->get();
-        // return view('dashboard.modules.administrator.user-accounts.show', [
-        //     'employees' => $employees,
-        //     'user_roles' => $user_roles,
-        //     'branches' => $branches,
-        //     'companies' => $companies
-        // ]);
+        return view('dashboard.modules.administrator.user-accounts.show',
+        compact('employee', 'userRole', 'companies', 'branches'));
     }
 
     /**

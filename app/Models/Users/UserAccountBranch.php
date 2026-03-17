@@ -7,16 +7,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserAccountBranch extends Model
 {
+    protected $table = 'user_account_branch';
+
     protected $primaryKey = 'row_id';
 
     protected $guarded = [];
 
-    protected $table = "user_account_branch";
-    // belongs to one user account
+    protected $casts = [
+        'branch' => 'array', // Crucial for multi-select
+    ];
 
-    public function account(): BelongsTo
-    {
-        return $this->belongsTo(UserAccount::class, 'user_id', 'row_id');
-    }
+    // public function account(): BelongsTo
+    // {
+    //     return $this->belongsTo(UserAccount::class);
+    // }
 
 }

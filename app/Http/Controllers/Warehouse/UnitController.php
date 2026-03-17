@@ -19,7 +19,7 @@ class UnitController extends Controller
 
     public function create(UnitAssemblyCredentials $service)
     {
-        $assemblies = UnitAssembly::whereIn('remarks', ['Make', 'Cabin', 'Body', 'Power', 'Wheels'])
+        $assemblies = UnitAssembly::query()->whereIn('remarks', ['Make', 'Cabin', 'Body', 'Power', 'Wheels'])
             ->orderBy('cdescription')->get()->groupBy('remarks');
 
         return view('dashboard.modules.warehouse.units.create', [

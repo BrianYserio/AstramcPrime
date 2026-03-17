@@ -68,9 +68,9 @@ class UserAccount extends Authenticatable
     //     return $this->where('username', $username)->first();
     // }
 
-    public function userAccountBranch(): BelongsToMany
+    public function userAccountBranch(): hasMany
     {
-        return $this->belongsToMany(UserAccountBranch::class, 'user_id','branch_id', 'row_id');
+        return $this->hasMany(UserAccountBranch::class, 'id', 'row_id');
     }
 
     protected static function boot()

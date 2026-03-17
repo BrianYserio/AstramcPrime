@@ -16,12 +16,10 @@ return new class extends Migration
         Schema::create('user_account_branch', function (Blueprint $table) {
             $table->id('row_id');
             // Foreign Key for the User
-            $table->string('id');
-
-            $table->string('company')->unique();
+            $table->string('id')->nullable();
+            $table->string('company');
             // Foreign Key for the Branch
             $table->string('branch');
-
             $table->timestamps();
         });
     }

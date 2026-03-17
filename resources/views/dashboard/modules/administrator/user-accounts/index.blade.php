@@ -87,7 +87,7 @@
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">
-                            {{-- {{ $employee->UserRole->role_description }} --}}
+                            {{-- {{ $employee->UserAccount->role_id }} --}}
                         </td>
 
                         <td class="px-4 py-3 text-xs text-gray-500">

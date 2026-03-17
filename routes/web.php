@@ -22,13 +22,16 @@ Route::middleware('auth')->group(function() {
         return view('dashboard.modules.dashboard.index');
     })->name('dashboard');
 
-Route::resource('management/human-resource', EmployeeController::class)
-    ->only(['index', 'create', 'store', 'show', 'edit', 'update'])
-    ->names('employees');
+    Route::resource('management/human-resource', EmployeeController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit'])
+        ->names('employees');
 
     Route::resource('administrator/user-accounts', UserAccountController::class)
         ->only(['index', 'create', 'store', 'show', 'update'])
         ->names('user-accounts');
+
+    // Route::put('administrator/user-accounts/user-info', [UserInfoController::class, 'updatedUserInfo'])->name('updateuserinfo.update');
+    // Route::patch('/user-login/update', [UserInfoController::class, 'updatedUserLogin']);
 
     Route::controller(SupplierController::class)
             ->prefix('purchasing/supplier')
@@ -46,6 +49,7 @@ Route::controller(UnitController::class)
     Route::get('/create',  'create')->name('create');
     Route::post('/',       'store')->name('store');
     });
+
 
 });
 

@@ -23,7 +23,7 @@ class Employee extends Model
 
     public function userAccount()
     {                                 //foreign_key_on_users // user_accounts primary key
-        return $this->hasOne(UserAccount::class, 'employee_id', 'row_id');
+        return $this->hasOne(UserAccount::class, 'employee_id',  'row_id');
     }
     public function employeeSchedule()
     {                                        //employee foreignkey // schedule primary key
